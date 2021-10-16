@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".MainActivity">
+
+
+    <TextView
+
+        android:id="@+id/header_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/main_color1"
+        android:gravity="center"
+        android:text="Daily Report"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        android:textStyle="bold"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+
+    <TextView
+        android:layout_marginTop="20sp"
+        android:id="@+id/date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textAlignment="viewEnd"
+        android:textColor="@color/main_color1"
+        android:textSize="15sp"
+        android:textStyle="italic|bold"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/header_title" />
+
+
+        <!--
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/et_test"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:hint="보내고 싶은 정보 입력"
+                android:minHeight="48dp"
+                android:textColor="@color/main_color1"
+                android:textColorHint="@color/main_color1" />
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="예제 액티비티" />
+        </LinearLayout>
+        -->
+
+
+    <Button
+        android:id="@+id/diaryButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="0dp"
+        android:layout_marginBottom="50dp"
+
+        android:background="@drawable/write_image"
+
+
+        android:backgroundTint="@color/main_color1"
+        android:gravity="bottom|center"
+
+
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/RecordButton"
+        app:layout_constraintStart_toStartOf="@+id/vertical_guideline"
+        app:layout_constraintTop_toBottomOf="@id/top_guideline"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <Button
+        android:id="@+id/RecordButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="0dp"
+
+
+        android:background="@drawable/record_schedule"
+        android:backgroundTint="@color/main_color1"
+
+        android:labelFor="@+id/RecordButton"
+        app:layout_constraintBottom_toTopOf="@+id/statisticsButton"
+        app:layout_constraintStart_toStartOf="@+id/vertical_guideline"
+        app:layout_constraintTop_toBottomOf="@id/diaryButton"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <Button
+        android:id="@+id/statisticsButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="0dp"
+
+        android:background="@drawable/statistics_image"
+        android:backgroundTint="@color/main_color1"
+        app:layout_constraintBottom_toTopOf="@+id/settingButton"
+        app:layout_constraintStart_toStartOf="@+id/vertical_guideline"
+        app:layout_constraintTop_toBottomOf="@+id/RecordButton"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <Button
+        android:id="@+id/settingButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="0dp"
+        android:background="@drawable/setting_image"
+        android:backgroundTint="@color/main_color1"
+
+
+        app:layout_constraintBottom_toTopOf="@+id/bottom_guideline"
+        app:layout_constraintStart_toStartOf="@+id/vertical_guideline"
+        app:layout_constraintTop_toBottomOf="@+id/statisticsButton"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <TextView
+
+        android:id="@+id/diary_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+
+        android:text="다이어리"
+        android:textColor="@color/main_color1"
+
+        android:textSize="30dp"
+        app:layout_constraintBottom_toTopOf="@+id/record_text"
+        app:layout_constraintStart_toEndOf="@+id/diaryButton"
+        app:layout_constraintTop_toTopOf="@+id/top_guideline" />
+
+    <TextView
+        android:id="@+id/record_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:text="활동기록"
+        android:textColor="@color/main_color1"
+
+        android:textSize="30dp"
+        app:layout_constraintBottom_toTopOf="@+id/statistics_text"
+        app:layout_constraintStart_toEndOf="@+id/RecordButton"
+        app:layout_constraintTop_toBottomOf="@+id/diary_text" />
+
+    <TextView
+        android:id="@+id/statistics_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+
+        android:text="통계"
+        android:textColor="@color/main_color1"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toTopOf="@+id/setting_text"
+        app:layout_constraintStart_toEndOf="@+id/statisticsButton"
+        app:layout_constraintTop_toBottomOf="@+id/record_text" />
+
+    <TextView
+        android:id="@+id/setting_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+
+        android:text="설정"
+        android:textColor="@color/main_color1"
+
+        android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="@id/bottom_guideline"
+        app:layout_constraintStart_toEndOf="@+id/settingButton"
+        app:layout_constraintTop_toBottomOf="@+id/statistics_text" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottom_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.8"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.2" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/vertical_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.2" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

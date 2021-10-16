@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".RecordPlusActivity"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="8dp"
+    android:layout_margin="10dp"
+
+    >
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <TextView
+
+            android:id="@+id/header_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="52dp"
+            android:text="기록추가"
+            android:textAlignment="center"
+            android:textColor="@color/main_color1"
+            android:padding="10dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/start_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:minHeight="48dp"
+            android:text="시작시간"
+
+            android:textColor="@color/main_color1"
+            android:padding="10dp"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@+id/vertical_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/header_title" />
+
+        <TextView
+            android:id="@+id/finish_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:minHeight="48dp"
+            android:text="종료시간"
+            android:textColor="@color/main_color1"
+            android:padding="10dp"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@+id/vertical_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/start_text" />
+
+        <TextView
+
+            android:id="@+id/act_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:minHeight="48dp"
+            android:text="활동내역"
+            android:textColor="@color/main_color1"
+            android:padding="10dp"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@+id/vertical_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/finish_text" />
+
+        <TextView
+            android:id="@+id/contentrate_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:minHeight="48dp"
+            android:text="집중도"
+            android:textAlignment="viewStart"
+            android:textColor="@color/main_color1"
+            android:padding="10dp"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@+id/vertical_guideline"
+
+
+            app:layout_constraintTop_toBottomOf="@+id/act_text" />
+
+        <TextView
+            android:id="@+id/image_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:minHeight="48dp"
+            android:text="사진자료"
+            android:textColor="@color/main_color1"
+            android:padding="10dp"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@+id/vertical_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/contentrate_text" />
+
+        <TextView
+
+            android:id="@+id/start_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/edit_text_border"
+            android:ems="10"
+            android:gravity="right"
+            android:minHeight="48dp"
+            android:text="00:00"
+            android:textColor="@color/main_color1"
+            android:textColorHint="@color/main_color1"
+            android:padding="10dp"
+            android:textSize="20sp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/start_text"
+            app:layout_constraintEnd_toEndOf="parent"
+
+
+            app:layout_constraintStart_toStartOf="@+id/text_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/header_title" />
+
+        <TextView
+            android:layout_marginRight="10dp"
+            android:id="@+id/finish_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/edit_text_border"
+            android:ems="10"
+            android:gravity="right"
+            android:minHeight="48dp"
+            android:text="00:00"
+            android:textColor="@color/main_color1"
+            android:textColorHint="@color/main_color1"
+            android:padding="10dp"
+            android:textSize="20sp"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/text_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/start_time" />
+
+        <EditText
+            android:layout_marginRight="10dp"
+            android:padding="10dp"
+            android:textSize="20sp"
+            android:id="@+id/act_content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/edit_text_border"
+            android:ems="10"
+            android:hint="활동내역 기입"
+            android:inputType="textPersonName"
+            android:minHeight="48dp"
+            android:textAlignment="textEnd"
+            android:textColor="@color/main_color1"
+            android:textColorHint="@color/main_color1"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            app:layout_constraintStart_toStartOf="@+id/text_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/finish_time" />
+
+        <Spinner
+            android:layout_marginRight="10dp"
+            android:padding="10dp"
+            android:textSize="20sp"
+            android:id="@+id/concentrate_spinner"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/edit_text_border"
+            android:minHeight="48dp"
+            android:textAlignment="viewEnd"
+            android:textColor="@color/main_color1"
+            android:textColorHint="@color/main_color1"
+            app:layout_constraintEnd_toEndOf="@+id/header_title"
+            app:layout_constraintHorizontal_bias="1.0"
+
+            app:layout_constraintTop_toBottomOf="@+id/act_content"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+        <Button
+            android:id="@+id/record_plus_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="40dp"
+            android:background="@drawable/button_shape"
+            android:text="추가"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/bottom_guideline" />
+
+        <Button
+            android:id="@+id/image_plus_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="40dp"
+            android:background="@drawable/button_shape"
+            android:text="사진"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.527"
+            app:layout_constraintStart_toEndOf="@+id/record_plus_button"
+            app:layout_constraintTop_toTopOf="@+id/bottom_guideline" />
+
+        <androidx.constraintlayout.widget.Guideline
+
+            android:id="@+id/bottom_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.9" />
+
+        <ImageView
+            android:layout_marginRight="10dp"
+            android:id="@+id/content_image"
+            android:layout_width="75dp"
+            android:layout_height="63dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/camera_image"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/concentrate_spinner" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/vertical_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="73dp"
+            app:layout_constraintGuide_percent="0.1" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/text_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

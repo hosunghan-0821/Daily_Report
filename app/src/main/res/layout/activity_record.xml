@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".RecordActivity">
+
+
+    <TextView
+        android:id="@+id/header_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/main_color1"
+        android:gravity="center"
+        android:text="Daily Report"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        android:textStyle="bold"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        app:layout_constraintGuide_percent="0.1"
+        android:id="@+id/header_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        />
+
+    <View
+        android:id="@+id/header_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black"
+
+        app:layout_constraintBottom_toBottomOf="@+id/act_text"
+        app:layout_constraintStart_toStartOf="parent" />
+    <TextView
+        android:id="@+id/time_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="시간"
+        android:textColor="@color/main_color1"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toStartOf="@+id/time_guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/header_guideline" />
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:textSize="15dp"
+        android:textColor="@color/main_color1"
+        android:id="@+id/act_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="활동내역"
+        app:layout_constraintEnd_toStartOf="@+id/act_content_guideline"
+        app:layout_constraintStart_toEndOf="@+id/time_guideline"
+        app:layout_constraintTop_toTopOf="@+id/header_guideline" />
+
+    <TextView
+
+        android:textSize="15dp"
+        android:textColor="@color/main_color1"
+        android:id="@+id/concentrate_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="집중도"
+        app:layout_constraintEnd_toStartOf="@+id/concentrate_guideline"
+        app:layout_constraintStart_toStartOf="@+id/act_content_guideline"
+        app:layout_constraintTop_toTopOf="@+id/header_guideline"
+        app:layout_goneMarginTop="10dp" />
+
+    <TextView
+
+        android:textColor="@color/main_color1"
+        android:textSize="15dp"
+        android:layout_marginTop="10dp"
+        android:id="@+id/image_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="사진"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/concentrate_guideline"
+        app:layout_constraintTop_toTopOf="@+id/header_guideline" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview_record"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/white"
+
+        app:layout_constraintBottom_toTopOf="@+id/RecordPlusButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/header_line">
+
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <Button
+
+
+        android:id="@+id/RecordPlusButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+
+        android:background="@drawable/button_shape"
+
+        android:shadowColor="@color/white"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="5"
+        android:text="+"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/time_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.15" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/act_content_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.65" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/concentrate_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.8"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
