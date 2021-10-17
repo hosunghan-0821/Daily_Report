@@ -82,22 +82,39 @@
                     android:orientation="vertical"
                     android:padding="10dp">
 
-
-                    <TextView
-                        android:id="@+id/ToDo_List_head"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:orientation="horizontal">
 
-                        android:padding="15dp"
-                        android:text="오늘의 할일"
-                        android:textColor="@color/main_color1"
-                        android:textSize="15sp"
-                        android:textStyle="bold|italic"
+                        <TextView
+                            android:layout_weight="1"
+                            android:id="@+id/ToDo_List_head"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
 
-                        app:layout_constraintBottom_toTopOf="@id/ToDo_List"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/date" />
+                            android:padding="15dp"
+                            android:text="오늘의 할일"
+                            android:textColor="@color/main_color1"
+                            android:textSize="15sp"
+                            android:textStyle="bold|italic"
+
+                            app:layout_constraintBottom_toTopOf="@id/ToDo_List"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/date" />
+                        <ImageView
+                            android:padding="10dp"
+                            android:id="@+id/todo_list_plus"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="8"
+                            android:src="@drawable/add_activity"
+                            >
+
+                        </ImageView>
+
+                    </LinearLayout>
 
                     <View
 
@@ -105,23 +122,31 @@
                         android:layout_height="1dp"
                         android:background="@color/black" />
 
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerview_todo_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        >
+
+                    </androidx.recyclerview.widget.RecyclerView>
+
                     <TextView
                         android:id="@+id/ToDo_List"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-
-                        android:gravity="top|left"
                         android:hint="Today's To DO "
                         android:inputType="textMultiLine"
-                        android:lines="10"
-                        android:minHeight="48dp"
+                        android:lines="1"
                         android:scrollbars="vertical"
+                        android:textAlignment="textEnd"
                         android:textColor="@color/black"
-                        android:textSize="20sp"
+                        android:textSize="10sp"
                         app:layout_constraintBottom_toTopOf="@id/SelfFeedback_head"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/ToDo_List_head" />
+                        app:layout_constraintTop_toBottomOf="@id/ToDo_List_head"
+                        tools:ignore="TouchTargetSizeCheck" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -141,15 +166,35 @@
                     android:orientation="vertical"
                     android:padding="10dp">
 
-                    <TextView
-                        android:id="@+id/SelfFeedback_head"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="15dp"
-                        android:text="오늘의 나에게"
-                        android:textColor="@color/main_color1"
-                        android:textSize="15sp"
-                        android:textStyle="bold|italic" />
+                        android:orientation="horizontal"
+                        >
+
+                        <TextView
+                            android:layout_weight="1"
+                            android:id="@+id/SelfFeedback_head"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="15dp"
+                            android:text="오늘의 나에게"
+                            android:textColor="@color/main_color1"
+                            android:textSize="15sp"
+                            android:textStyle="bold|italic" />
+                        <ImageView
+                            android:padding="10dp"
+                            android:id="@+id/self_feedback_plus"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="8"
+                            android:src="@drawable/add_activity"
+                            >
+
+                        </ImageView>
+
+                    </LinearLayout>
+
 
 
                     <View
@@ -163,11 +208,10 @@
                         android:layout_height="wrap_content"
                         android:gravity="top|left"
                         android:hint="Today's Self FeedBack "
-                        android:lines="10"
                         android:minHeight="48dp"
                         android:scrollbars="vertical"
                         android:textColor="@color/black"
-                        android:textSize="20sp" />
+                        android:textSize="15sp" />
 
 
                 </LinearLayout>

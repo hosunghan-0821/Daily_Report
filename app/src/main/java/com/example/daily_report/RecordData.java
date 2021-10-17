@@ -2,7 +2,9 @@ package com.example.daily_report;
 
 import android.graphics.Bitmap;
 
-public class RecordData {
+import java.io.Serializable;
+
+public class RecordData  {
 
     private int recordImage;
     private String startTime,finishTime,actContent,concentrate;

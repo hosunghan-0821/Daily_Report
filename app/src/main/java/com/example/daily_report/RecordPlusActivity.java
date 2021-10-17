@@ -16,6 +16,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -38,7 +39,7 @@ public class RecordPlusActivity extends AppCompatActivity {
     private final int PERMISSIONS_REQUEST = 1001;
     private static final String TAG = "RecordPlusActivity";
     String[] items = {"상", "중", "하"};
-    TextView startTime, finishTime;
+    TextView startTime, finishTime, headerTitle;
     Button recordPlusButton, imagePlusButton;
     EditText actContent;
     ImageView contentImage;
@@ -47,6 +48,7 @@ public class RecordPlusActivity extends AppCompatActivity {
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
     private TimePickerDialog timePickerDialogEx;
+    private int position;
 
 
     // 암시적인텐트를 활용해서 증거사진 찍어서 미리보기 파일로 보여주기..
@@ -86,6 +88,7 @@ public class RecordPlusActivity extends AppCompatActivity {
         spinner.setAdapter(adapter);
 
         //XML에서 추가한 id를 통해 각종 변수들 선언하는 곳
+        headerTitle = findViewById(R.id.header_title);
         contentImage = findViewById(R.id.content_image);
         recordPlusButton = findViewById(R.id.record_plus_button);
         imagePlusButton = findViewById(R.id.image_plus_button);
@@ -97,76 +100,111 @@ public class RecordPlusActivity extends AppCompatActivity {
         // 생성될 때 종료시간을 현재 시간으로 세팅해두기
 
 
-        //기존에 있던 정보들 불러오기
-        //SharedPreferences sf = getSharedPreferences("sFile",MODE_PRIVATE);
-        //String text = sf.getString("startTime","");
-        //startTime.setText(text);
+        //수정할 때, updateLauncher에 의해서 각종 정보들을 넘겨받고, 번들이 NULL이 아니라면, 각종 데이터들을 기록 추가버튼에 설정하는거지
+        Intent i = getIntent();
+        Bundle bundleCheck = getIntent().getExtras();
 
+        if (bundleCheck != null) {
+            position =bundleCheck.getInt("position");
 
-        //  추가하기 버튼 눌렀을 때, 데이터 정보 옮기는 코드
-        recordPlusButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            headerTitle.setText("기록수정");
+            recordPlusButton.setText("수정");
+            startTime.setText(bundleCheck.getString("startTime"));
+            finishTime.setText(bundleCheck.getString("finishTime"));
+            actContent.setText(bundleCheck.getString("actContent"));
+            for (int j = 1; j < 3; j++) {
+                if (spinner.getSelectedItem().toString().equals(bundleCheck.getString("concentrate"))) {
+                    break;
+                } else {
+                    spinner.setSelection(j);
+                }
+            }
+            if (bundleCheck.getByteArray("image") == null) {
 
-                //xml에 존재하는 EditText 들로 부터 정보를 각 변수에 넣기
+            } else {
+                byte[] arr = bundleCheck.getByteArray("image");
+                Bitmap image = BitmapFactory.decodeByteArray(arr, 0, arr.length);
+                contentImage.setImageBitmap(image);
+            }
 
-                String TimeS = startTime.getText().toString();
-                String TimeF = finishTime.getText().toString();
-                String actC = actContent.getText().toString();
-                String concentrate = spinner.getSelectedItem().toString();
+            //  수정하기 버튼 눌렀을 때, 데이터 정보 옮기는 코드 => RecyclerView 수정할 때 실행
+            //  RecyclerView 의 포지션에 접근해서 정보를 수정하기 or Intent로 정보를 전달해서 그 함수 내에서, recyclerView 정보의 내용을 수정할지.
 
-                //기존에 쓴 내용 저장하기  -> (실험용) 나쁘진 않다. 나중에 쓸만한 기능
+        }
+        //  추가하기 버튼 눌렀을 때, 데이터 정보 옮기는 코드 => RecyclerView 추가할 때 실행
+            recordPlusButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    //xml에 존재하는 EditText 들로 부터 정보를 각 변수에 넣기
+
+                    String TimeS = startTime.getText().toString();
+                    String TimeF = finishTime.getText().toString();
+                    String actC = actContent.getText().toString();
+                    String concentrate = spinner.getSelectedItem().toString();
+
+                    //기존에 쓴 내용 저장하기  -> (실험용) 나쁘진 않다. 나중에 쓸만한 기능
                 /*SharedPreferences sharedPreferences = getSharedPreferences("sFile", MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("startTime", TimeS);
                 editor.apply();*/
 
-                //정보를 변수에 넣고 나머지는 번들에 넣기.
-                Bundle bundle = new Bundle();
-                bundle.putString("startTime", TimeS);
-                bundle.putString("finishTime", TimeF);
-                bundle.putString("actContent", actC);
-                bundle.putString("concentrate", concentrate);
+                    //정보를 변수에 넣고 나머지는 번들에 넣기.
+                    Bundle bundle = new Bundle();
+                    bundle.putString("startTime", TimeS);
+                    bundle.putString("finishTime", TimeF);
+                    bundle.putString("actContent", actC);
+                    bundle.putString("concentrate", concentrate);
+                    if(bundleCheck!=null){
+                        bundle.putInt("position",position);
+                    }
 
 
-                //contentimage에 있는 사진 정보를 drawble로 바꾸고 -> drawable 파일을 비트맵으로 만든후 -> 바이트로 만든다.
-                try {
-                    BitmapDrawable drawable = (BitmapDrawable) contentImage.getDrawable();
-                    Bitmap bitmap = drawable.getBitmap();
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                    byte[] byteArray = stream.toByteArray();
-                    bundle.putByteArray("image", byteArray);
-                } catch (Exception e) {
-                    System.out.println("사진 안찍어서 오류");
-                }
+                    //contentimage에 있는 사진 정보를 drawble로 바꾸고 -> drawable 파일을 비트맵으로 만든후 -> 바이트로 만든다.
+                    try {
+                        BitmapDrawable drawable = (BitmapDrawable) contentImage.getDrawable();
+                        Bitmap bitmap = drawable.getBitmap();
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                        byte[] byteArray = stream.toByteArray();
+                        bundle.putByteArray("image", byteArray);
+                    } catch (Exception e) {
+                        System.out.println("사진 안찍어서 오류");
+                    }
 
-                //인텐트에 번들을 넣고 전송
-                Intent i = new Intent(RecordPlusActivity.this, RecordActivity.class);
+                    //인텐트에 번들을 넣고 전송
+                    Intent i = new Intent(RecordPlusActivity.this, RecordActivity.class);
 
-                boolean change = true;
+                    boolean change = true;
 
-                //시간 비교하고 , 이걸 text에 있는걸 Int 로 변환하는 것보다 변수하나 만들어서 시간 저장할 때 체크하는게 더 나은 방법인거 같기도...
-                if (Integer.parseInt((startTime.getText().toString().substring(0, 2))) > Integer.parseInt((finishTime.getText().toString().substring(0, 2)))) {
-                    Toast.makeText(RecordPlusActivity.this, "시작시간 종료시간 재설정 하세요.", Toast.LENGTH_SHORT).show();
-                    change = false;
-                } else if (Integer.parseInt((startTime.getText().toString().substring(0, 2))) == Integer.parseInt((finishTime.getText().toString().substring(0, 2)))) {
-
-                    if (Integer.parseInt((startTime.getText().toString().substring(3, 5))) == Integer.parseInt((finishTime.getText().toString().substring(3, 5)))) {
+                    //시간 비교하고 , 이걸 text에 있는걸 Int 로 변환하는 것보다 변수하나 만들어서 시간 저장할 때 체크하는게 더 나은 방법인거 같기도...
+                    if (Integer.parseInt((startTime.getText().toString().substring(0, 2))) > Integer.parseInt((finishTime.getText().toString().substring(0, 2)))) {
                         Toast.makeText(RecordPlusActivity.this, "시작시간 종료시간 재설정 하세요.", Toast.LENGTH_SHORT).show();
                         change = false;
+                    } else if (Integer.parseInt((startTime.getText().toString().substring(0, 2))) == Integer.parseInt((finishTime.getText().toString().substring(0, 2)))) {
+
+                        if (Integer.parseInt((startTime.getText().toString().substring(3, 5))) > Integer.parseInt((finishTime.getText().toString().substring(3, 5)))) {
+                            Toast.makeText(RecordPlusActivity.this, "시작시간 종료시간 재설정 하세요.", Toast.LENGTH_SHORT).show();
+                            change = false;
+                        }
                     }
-                }
-                if (change == true) {
-                    i.putExtras(bundle);
-                    setResult(Activity.RESULT_OK, i);
-                    finish();
-                }
+                    if (change == true&&bundleCheck==null) {
+                        i.putExtras(bundle);
+                        setResult(Activity.RESULT_OK, i);
+                        finish();
+                    }
+                    if(change==true &&bundleCheck!=null){
+                        i.putExtras(bundle);
+                        setResult(100, i);
+                        finish();
 
-                //Log.e(TAG, "일정을 추가하고 정상 종료합니다");
+                    }
 
-            }
-        });
+
+                    //Log.e(TAG, "일정을 추가하고 정상 종료합니다");
+
+                }
+            });
 
         //사진 찍고 저장하는 코드 암시적 인텐트 사용
         imagePlusButton.setOnClickListener(new View.OnClickListener() {

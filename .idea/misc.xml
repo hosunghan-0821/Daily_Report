@@ -15,7 +15,7 @@
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/drawable/setting_image.xml" value="0.1" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/drawable/statistics_image.xml" value="0.1" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/activity_calender.xml" value="0.16019736842105264" />
-        <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/activity_diary.xml" value="0.13145539906103287" />
+        <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/activity_diary.xml" value="0.152" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/activity_examplelayout.xml" value="0.16019736842105264" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/activity_examplelayout2.xml" value="0.1" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/activity_main.xml" value="0.128" />
@@ -32,6 +32,7 @@
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/fragment_settings.xml" value="0.20108695652173914" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/fragment_statistics.xml" value="0.176" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/listview_layout.xml" value="0.14309210526315788" />
+        <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/recyclerview_diary_todo_layout.xml" value="0.2" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/recyclerview_record_layout.xml" value="0.2" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/menu/bottom_menu.xml" value="0.25364583333333335" />
         <entry key="..\:/Users/hosunghan/AppData/Local/Android/Sdk/platforms/android-31/data/res/layout/simple_list_item_1.xml" value="0.14309210526315788" />
