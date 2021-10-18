@@ -68,7 +68,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:minHeight="48dp"
-            android:text="활동내역"
+            android:text="활동유형"
             android:textColor="@color/main_color1"
             android:padding="10dp"
             android:textSize="20sp"
@@ -147,7 +147,7 @@
             app:layout_constraintStart_toStartOf="@+id/text_guideline"
             app:layout_constraintTop_toBottomOf="@+id/start_time" />
 
-        <EditText
+        <TextView
             android:layout_marginRight="10dp"
             android:padding="10dp"
             android:textSize="20sp"
@@ -158,7 +158,6 @@
             android:background="@drawable/edit_text_border"
             android:ems="10"
             android:hint="활동내역 기입"
-            android:inputType="textPersonName"
             android:minHeight="48dp"
             android:textAlignment="textEnd"
             android:textColor="@color/main_color1"

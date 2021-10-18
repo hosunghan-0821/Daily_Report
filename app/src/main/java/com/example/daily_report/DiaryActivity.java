@@ -58,10 +58,10 @@ public class DiaryActivity extends AppCompatActivity {
 
         diaryRecyclerView.setLayoutManager(linearLayoutManager);
         diaryRecyclerView.setAdapter(diaryAdapter);
-        diaryRecyclerView.setHasFixedSize(true);
+        // diaryRecyclerView.setHasFixedSize(true);
 
-
-        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT|ItemTouchHelper.RIGHT) {
+        // 좌우로 스와이프 할 때 삭제 하려고 만든 itemtouchhelper 객체
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
                 return false;
@@ -76,7 +76,7 @@ public class DiaryActivity extends AppCompatActivity {
             }
         };
 
-        ItemTouchHelper itemTouchHelper= new ItemTouchHelper(simpleItemTouchCallback);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(diaryRecyclerView);
 
 
@@ -154,8 +154,8 @@ public class DiaryActivity extends AppCompatActivity {
 
                         diaryToDoDataList.add(data);
                         Log.e("123", "my message add(data)");
-                        diaryAdapter.notifyItemInserted(diaryToDoDataList.size()-1);
-                        Log.e("123", "my message notifyDataSet tododatalist size : "+diaryToDoDataList.size());
+                        diaryAdapter.notifyItemInserted(diaryToDoDataList.size() - 1);
+                        Log.e("123", "my message notifyDataSet tododatalist size : " + diaryToDoDataList.size());
                         dialogInterface.dismiss();
                     }
                 });
@@ -217,6 +217,8 @@ public class DiaryActivity extends AppCompatActivity {
         selfFeedBackPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
                 AlertDialog.Builder feedBackDialog = new AlertDialog.Builder(DiaryActivity.this);
                 final EditText feedBack = new EditText(DiaryActivity.this);
 

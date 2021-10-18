@@ -233,8 +233,8 @@ public class RecordActivity extends AppCompatActivity {
                 Intent i = new Intent(RecordActivity.this, RecordPlusActivity.class);
 
                 resultLauncher.launch(i);
-
             }
+
         });
 
 

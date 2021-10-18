@@ -23,6 +23,8 @@
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/activity_record_plus.xml" value="0.176" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/activity_setting.xml" value="0.16019736842105264" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/activity_statistics.xml" value="0.2" />
+        <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/dialog_act_content_layout.xml" value="0.16" />
+        <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/dialog_self_feddback_layout.xml" value="0.2" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/dialog_time_select.xml" value="0.16019736842105264" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/fragment_blank.xml" value="0.20108695652173914" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/fragment_calender.xml" value="0.176" />
@@ -32,6 +34,7 @@
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/fragment_settings.xml" value="0.20108695652173914" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/fragment_statistics.xml" value="0.176" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/listview_layout.xml" value="0.14309210526315788" />
+        <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/recyclerview_dialog_actcontent_layout.xml" value="0.2" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/recyclerview_diary_todo_layout.xml" value="0.2" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/recyclerview_record_layout.xml" value="0.2" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/menu/bottom_menu.xml" value="0.25364583333333335" />

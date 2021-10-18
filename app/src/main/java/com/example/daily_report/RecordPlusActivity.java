@@ -5,13 +5,19 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 import android.Manifest;
 import android.app.Activity;
 import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -21,7 +27,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,6 +40,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class RecordPlusActivity extends AppCompatActivity {
@@ -41,9 +50,16 @@ public class RecordPlusActivity extends AppCompatActivity {
     String[] items = {"상", "중", "하"};
     TextView startTime, finishTime, headerTitle;
     Button recordPlusButton, imagePlusButton;
-    EditText actContent;
-    ImageView contentImage;
+    TextView actContent;
+    ImageView contentImage,plusImage;
+    View dialogView;
 
+    private RecyclerView dialogRecyclerView;
+    private ArrayList<RecordPlusActivityActData> actDataList;
+    private LinearLayoutManager linearLayoutManager;
+    private RecordPlusActivityAdapter actAdapter;
+
+    private RecordPlusActivityAdapter.OnDialogItemClickListener listener;
     private boolean startCheck, finishCheck;
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
@@ -73,6 +89,7 @@ public class RecordPlusActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+
         Calendar currentTime = Calendar.getInstance();
         int hour = currentTime.get(Calendar.HOUR_OF_DAY);
         int minute = currentTime.get(Calendar.MINUTE);
@@ -95,6 +112,10 @@ public class RecordPlusActivity extends AppCompatActivity {
         startTime = findViewById(R.id.start_time);
         finishTime = findViewById(R.id.finish_time);
         actContent = findViewById(R.id.act_content);
+
+
+        //Dialog 에 적용할 RecyclerView 선언해두자.
+
 
 
         // 생성될 때 종료시간을 현재 시간으로 세팅해두기
@@ -356,6 +377,155 @@ public class RecordPlusActivity extends AppCompatActivity {
             }
         });
 
+
+        //활동유형 입력할 때, 다이얼로그 사용하여서, recyclerview 구현하기
+        actContent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //View 에  XML _ inflating 하는  3가지  다 가능한 방법
+
+                /* dialogView=view.inflate(RecordPlusActivity.this,R.layout.activity_calender,null);
+                view=view.inflate(RecordPlusActivity.this,R.layout.activity_calender,null);
+                view= LayoutInflater.from(RecordPlusActivity.this).inflate(R.layout.recyclerview_diary_todo_layout,null,false);*/
+
+                //dialog에서 선택 박스 만들고 하나만 선택하게 하는 코드
+
+                /*
+                final CharSequence[] items = {"사과","딸기","오렌지","수박"};
+                int checkditem=-1;
+                actDialog.setSingleChoiceItems(items, checkditem, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(getApplicationContext(), "선택됨",Toast.LENGTH_SHORT).show();
+                        dialogInterface.dismiss();
+                    }
+                });
+                */
+
+                //클릭했을시 다이얼로그 생성하고, 그 안에서 리사이클러뷰를 활용
+                dialogShow(view);
+
+            }
+        });
+
+
+    }
+
+    //다이얼로그 만들고 리사이클러뷰  CRUD 담당 하는부분.
+    public void dialogShow(View view){
+        AlertDialog.Builder actDialog = new AlertDialog.Builder(RecordPlusActivity.this);
+        AlertDialog actDialogDismiss= actDialog.create();
+        view= LayoutInflater.from(RecordPlusActivity.this).inflate(R.layout.dialog_act_content_layout,null,false);
+        actDialogDismiss.setView(view);
+
+        plusImage=view.findViewById(R.id.act_content_plus);
+        dialogRecyclerView=view.findViewById(R.id.recyclerview_dialog);
+        actDataList = new ArrayList<RecordPlusActivityActData>();
+        actAdapter = new RecordPlusActivityAdapter(actDataList);
+
+        dialogRecyclerView.setAdapter(actAdapter);
+        dialogRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+
+        //아이템 swipe 할 때 사용하는 것들
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getAbsoluteAdapterPosition();
+                actDataList.remove(position);
+                actAdapter.notifyItemRemoved(position);
+
+            }
+        };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(dialogRecyclerView);
+
+
+        //아이템 클릭 리스너 재정의하는 부분
+        listener = new RecordPlusActivityAdapter.OnDialogItemClickListener() {
+            @Override
+            public void setItemClick(RecordPlusActivityAdapter.DialogViewHolder dialogViewHolder, View itemView, int position) {
+
+                actContent.setText( dialogViewHolder.actContentChoice.getText().toString());
+                actDialogDismiss.dismiss();
+
+
+            }
+        };
+        actAdapter.setItemClickListener(listener);
+
+        Log.e("123","view.getcontext()"+view.getContext());
+        actDataList.add(new RecordPlusActivityActData("공부"));
+        actDataList.add(new RecordPlusActivityActData("식사"));
+        actDataList.add(new RecordPlusActivityActData("수면"));
+        actDataList.add(new RecordPlusActivityActData("프로그래밍"));
+        actDataList.add(new RecordPlusActivityActData("운동"));
+
+        actDialogDismiss.show();
+
+        actAdapter.notifyDataSetChanged();
+
+
+        //활동유형 추가하기 버튼 눌렀을 때, 나오는 dialog
+        plusImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder plusDialog = new AlertDialog.Builder(RecordPlusActivity.this);
+
+                final EditText editText = new EditText(RecordPlusActivity.this);
+                editText.requestFocus();
+
+                //다이얼로그 안의 내용들 추가해주는 코드
+                plusDialog.setMessage("활동 유형을 추가하세요 ");
+                plusDialog.setView(editText);
+
+                //확인 버튼을 눌렀을 때, 일어나는 행동들
+                plusDialog.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //여기서 recyclerview 추가하기
+                        String text = editText.getText().toString();
+
+                        if(text.equals("")){
+                            Toast.makeText(RecordPlusActivity.this,"활동유형을 다시 입력하세요", Toast.LENGTH_SHORT).show();
+
+                        }
+                        else{
+                            actDataList.add(new RecordPlusActivityActData(text));
+                            actAdapter.notifyItemInserted(actDataList.size()-1);
+                            InputMethodManager immhide = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+
+                            immhide.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+
+                           // dialogInterface.dismiss();
+                        }
+
+                    }
+                });
+
+
+                //취소 버튼을 눌렀을 때, 일어나는 행동들
+                plusDialog.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+
+
+                plusDialog.show();
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+
+
+
+            }
+        });
     }
 
     @Override

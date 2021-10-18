@@ -76,6 +76,7 @@ public class DiaryAdapter extends RecyclerView.Adapter<DiaryAdapter.DiaryViewHol
                 public void onClick(View view) {
                     int position = getAbsoluteAdapterPosition();
                     if(listener != null){
+
                         listener.onItemClick(DiaryViewHolder.this,view,position);
                     }
                 }
