@@ -5,6 +5,8 @@
       <map>
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/drawable/add_activity.xml" value="0.17039473684210527" />
+        <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/drawable/button_circle.xml" value="0.17039473684210527" />
+        <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/drawable/button_shape.xml" value="0.17039473684210527" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/drawable/buttonshape.xml" value="0.16052631578947368" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/drawable/calender_image.xml" value="0.1" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/drawable/cardview_border.xml" value="0.17039473684210527" />
@@ -15,7 +17,8 @@
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/drawable/setting_image.xml" value="0.1" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/drawable/statistics_image.xml" value="0.1" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/activity_calender.xml" value="0.16019736842105264" />
-        <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/activity_diary.xml" value="0.152" />
+        <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/activity_daily_routine.xml" value="0.2" />
+        <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/activity_diary.xml" value="0.1" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/activity_examplelayout.xml" value="0.16019736842105264" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/activity_examplelayout2.xml" value="0.1" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/activity_main.xml" value="0.128" />
@@ -23,8 +26,9 @@
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/activity_record_plus.xml" value="0.176" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/activity_setting.xml" value="0.16019736842105264" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/activity_statistics.xml" value="0.2" />
+        <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/check.xml" value="0.264" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/dialog_act_content_layout.xml" value="0.16" />
-        <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/dialog_self_feddback_layout.xml" value="0.2" />
+        <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/dialog_self_feddback_layout.xml" value="0.176" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/dialog_time_select.xml" value="0.16019736842105264" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/fragment_blank.xml" value="0.20108695652173914" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/fragment_calender.xml" value="0.176" />
@@ -34,6 +38,7 @@
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/fragment_settings.xml" value="0.20108695652173914" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/fragment_statistics.xml" value="0.176" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/listview_layout.xml" value="0.14309210526315788" />
+        <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/recycelrview_routine_layout.xml" value="0.264" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/recyclerview_dialog_actcontent_layout.xml" value="0.2" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/recyclerview_diary_todo_layout.xml" value="0.2" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/recyclerview_record_layout.xml" value="0.2" />

@@ -419,6 +419,8 @@ public class RecordPlusActivity extends AppCompatActivity {
         actDialogDismiss.setView(view);
 
         plusImage=view.findViewById(R.id.act_content_plus);
+
+
         dialogRecyclerView=view.findViewById(R.id.recyclerview_dialog);
         actDataList = new ArrayList<RecordPlusActivityActData>();
         actAdapter = new RecordPlusActivityAdapter(actDataList);

@@ -14,11 +14,14 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -83,7 +86,6 @@ public class DiaryActivity extends AppCompatActivity {
         diaryAdapter.setItemClickListener(new DiaryAdapter.OnDiaryItemClickListener() {
             @Override
             public void onItemClick(DiaryAdapter.DiaryViewHolder diaryViewHolder, View itemView, int position) {
-
 
                 AlertDialog.Builder updateDialog = new AlertDialog.Builder(DiaryActivity.this);
                 updateDialog.setMessage("수정 할 내용을 입력하세요");
@@ -219,19 +221,27 @@ public class DiaryActivity extends AppCompatActivity {
             public void onClick(View view) {
 
 
-                AlertDialog.Builder feedBackDialog = new AlertDialog.Builder(DiaryActivity.this);
-                final EditText feedBack = new EditText(DiaryActivity.this);
 
-                //다이얼로그 안의 내용들 추가해주는 코드
-                feedBackDialog.setMessage("오늘 스스로를 돌아보세요 ");
-                feedBackDialog.setView(feedBack);
+              
+
+                view= LayoutInflater.from(DiaryActivity.this).inflate(R.layout.dialog_self_feddback_layout,null,false);
+
+                EditText selfFeedbackFinal =view.findViewById(R.id.self_feedback_final);
+                EditText selfFeedbackGood = view.findViewById(R.id.self_feedback_good_point);
+                EditText selfFeedbackBad=view.findViewById(R.id.self_feedback_bad_point);
+                RatingBar ratingBar = view.findViewById(R.id.self_feedback_rating);
+                AlertDialog.Builder feedBackDialog = new AlertDialog.Builder(DiaryActivity.this);
+                feedBackDialog.setView(view);
+
 
                 //확인 버튼을 눌렀을 때, 일어나는 행동들
                 feedBackDialog.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        String text = feedBack.getText().toString();
-                        feedBackText.setText(text);
+
+                        // 여기서 각종 Rating bar 점수들이랑 이런 것들 저장하는곳에 저장하고, 평가를 어떻게 할 것인지는 생각해보자
+                        feedBackText.setText(selfFeedbackFinal.getText().toString());
+                        Toast.makeText(DiaryActivity.this,"별점  : "+ratingBar.getRating(),Toast.LENGTH_SHORT).show();
                         dialogInterface.dismiss();
                     }
                 });
@@ -301,6 +311,7 @@ public class DiaryActivity extends AppCompatActivity {
                 SharedPreferences sf = getSharedPreferences("sFile", MODE_PRIVATE);
                 String text = sf.getString(headerDate.getText().toString(), "");
                 //toDoList.setText(text);
+
             }
         }, 2021, 10 - 1, 11);
 

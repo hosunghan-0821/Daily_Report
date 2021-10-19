@@ -100,9 +100,23 @@
         android:backgroundTint="@color/main_color1"
 
         android:labelFor="@+id/RecordButton"
-        app:layout_constraintBottom_toTopOf="@+id/statisticsButton"
+        app:layout_constraintBottom_toTopOf="@+id/routineButton"
         app:layout_constraintStart_toStartOf="@+id/vertical_guideline"
         app:layout_constraintTop_toBottomOf="@id/diaryButton"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <Button
+
+        android:id="@+id/routineButton"
+
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="0dp"
+        android:background="@drawable/daily_routine_image"
+        android:backgroundTint="@color/main_color1"
+        app:layout_constraintBottom_toTopOf="@id/statisticsButton"
+        app:layout_constraintStart_toStartOf="@id/vertical_guideline"
+        app:layout_constraintTop_toBottomOf="@id/RecordButton"
         tools:ignore="SpeakableTextPresentCheck" />
 
     <Button
@@ -113,9 +127,9 @@
 
         android:background="@drawable/statistics_image"
         android:backgroundTint="@color/main_color1"
+        app:layout_constraintTop_toBottomOf="@id/routineButton"
         app:layout_constraintBottom_toTopOf="@+id/settingButton"
         app:layout_constraintStart_toStartOf="@+id/vertical_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/RecordButton"
         tools:ignore="SpeakableTextPresentCheck" />
 
     <Button
@@ -137,11 +151,10 @@
         android:id="@+id/diary_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="50dp"
 
         android:text="다이어리"
+        android:layout_marginLeft="50dp"
         android:textColor="@color/main_color1"
-
         android:textSize="30dp"
         app:layout_constraintBottom_toTopOf="@+id/record_text"
         app:layout_constraintStart_toEndOf="@+id/diaryButton"
@@ -151,37 +164,52 @@
         android:id="@+id/record_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
         android:text="활동기록"
+        android:layout_marginLeft="50dp"
         android:textColor="@color/main_color1"
 
         android:textSize="30dp"
-        app:layout_constraintBottom_toTopOf="@+id/statistics_text"
+        app:layout_constraintBottom_toTopOf="@+id/routine_text"
         app:layout_constraintStart_toEndOf="@+id/RecordButton"
         app:layout_constraintTop_toBottomOf="@+id/diary_text" />
+
+    <TextView
+        android:id="@+id/routine_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginLeft="50dp"
+
+        android:text="하루루틴"
+        android:textColor="@color/main_color1"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toTopOf="@id/statistics_text"
+        app:layout_constraintStart_toEndOf="@+id/routineButton"
+        app:layout_constraintTop_toBottomOf="@id/record_text" />
 
     <TextView
         android:id="@+id/statistics_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="50dp"
 
         android:text="통계"
+        android:layout_marginLeft="50dp"
         android:textColor="@color/main_color1"
         android:textSize="30dp"
         app:layout_constraintBottom_toTopOf="@+id/setting_text"
         app:layout_constraintStart_toEndOf="@+id/statisticsButton"
-        app:layout_constraintTop_toBottomOf="@+id/record_text" />
+        app:layout_constraintTop_toBottomOf="@id/routine_text" />
+
 
     <TextView
         android:id="@+id/setting_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="50dp"
 
         android:text="설정"
-        android:textColor="@color/main_color1"
 
+        android:layout_marginLeft="50dp"
+        android:textColor="@color/main_color1"
         android:textSize="30dp"
         app:layout_constraintBottom_toBottomOf="@id/bottom_guideline"
         app:layout_constraintStart_toEndOf="@+id/settingButton"

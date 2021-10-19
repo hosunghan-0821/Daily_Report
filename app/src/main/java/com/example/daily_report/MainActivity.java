@@ -18,7 +18,7 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity {
 
 
-    private Button diaryButton, recordButton, statisticsButton, settingButton;
+    private Button diaryButton, recordButton, statisticsButton, settingButton,routineButton;
     private TextView date_;
 
 
@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         diaryButton=(Button) findViewById(R.id.diaryButton);
         statisticsButton =(Button) findViewById(R.id.statisticsButton);
         settingButton =(Button) findViewById(R.id.settingButton);
+        routineButton=(Button) findViewById(R.id.routineButton);
 
 
 
@@ -73,10 +74,15 @@ public class MainActivity extends AppCompatActivity {
                         Intent i4= new Intent (MainActivity.this,SettingActivity.class);
                         startActivity(i4);
                         break;
+                    case R.id.routineButton:
+                        Intent i5 =new Intent(MainActivity.this,DailyRoutineActivity.class);
+                        startActivity(i5);
+
                 }
             }
         };
         //click 객체 각 버튼에 장착
+        routineButton.setOnClickListener(click);
         recordButton.setOnClickListener(click);
         diaryButton.setOnClickListener(click);
         statisticsButton.setOnClickListener(click);

@@ -26,9 +26,38 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+
+        android:textColor="@color/main_color1"
+        android:layout_marginRight="20dp"
+        android:id="@+id/header_month"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="10월"
+        android:textAlignment="textEnd"
+        app:layout_constraintBottom_toTopOf="@+id/calendarView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/header_title" />
+
+    <devs.mulham.horizontalcalendar.HorizontalCalendarView
+
+        android:id="@+id/calendarView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/header_guideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:selectorColor="@color/main_color1"
+        app:colorBottomTextSelected="@color/main_color1"
+        app:sizeMiddleText="10dp"
+        app:colorMiddleTextSelected="@color/main_color1"
+        app:textColorNormal="@color/black"
+        app:textColorSelected="@color/black"
+
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <androidx.constraintlayout.widget.Guideline
-        app:layout_constraintGuide_percent="0.1"
+        app:layout_constraintGuide_percent="0.2"
         android:id="@+id/header_guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -62,7 +91,7 @@
         android:id="@+id/act_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="활동내역"
+        android:text="활동유형"
         app:layout_constraintEnd_toStartOf="@+id/act_content_guideline"
         app:layout_constraintStart_toEndOf="@+id/time_guideline"
         app:layout_constraintTop_toTopOf="@+id/header_guideline" />

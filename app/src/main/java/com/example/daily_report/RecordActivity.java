@@ -25,6 +25,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.icu.text.SimpleDateFormat;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -39,7 +40,12 @@ import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+
+import devs.mulham.horizontalcalendar.HorizontalCalendar;
+import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
 
 @RequiresApi(api = Build.VERSION_CODES.N)
 public class RecordActivity extends AppCompatActivity {
@@ -158,7 +164,6 @@ public class RecordActivity extends AppCompatActivity {
 
         //  각, itemView 클릭할시 행동하는 함수 정의
         //  interface listener를 만들어서, 리사이클러뷰 있는 곳에서 클릭이벤트 재정의 한다.
-
         recordAdapter.setItemClickListener(new OnRecordItemClickListener() {
             @Override
             public void onItemClick(RecordAdapter.RecordViewHolder recordViewHolder, View view, int position) {
@@ -193,6 +198,7 @@ public class RecordActivity extends AppCompatActivity {
 
             }
 
+            //롱클릭 했을시 재선언 (interface내용)
             @Override
             public void onItemLongClick(RecordAdapter.RecordViewHolder recordViewHolder, View view, int position) {
 
@@ -222,6 +228,47 @@ public class RecordActivity extends AppCompatActivity {
                 deleteDialog.show();
             }
         });
+
+        //상단 horizontal 관련 내용 정의
+        // 이 달력은 현재보다 한달 느린 달력
+        Calendar startDate = Calendar.getInstance();
+        startDate.add(Calendar.MONTH, -1);
+
+        // 이 달력은 현재까지
+        Calendar endDate = Calendar.getInstance();
+        endDate.add(Calendar.MONTH, 0);
+
+
+
+        HorizontalCalendar.Builder horizontalCalendar = new HorizontalCalendar.Builder(this, R.id.calendarView);
+        horizontalCalendar.range(startDate,endDate);
+        horizontalCalendar.datesNumberOnScreen(5);
+        horizontalCalendar.configure().showTopText(false);
+        horizontalCalendar.configure().end();
+        HorizontalCalendar horizontalCalendar1 =horizontalCalendar.build();
+
+        TextView headerMonth = findViewById(R.id.header_month);
+        long now =System.currentTimeMillis();
+        Date date= new Date(now);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM월");
+        String getMonth = dateFormat.format(date);
+        headerMonth.setText(getMonth);
+
+        horizontalCalendar1.setCalendarListener(new HorizontalCalendarListener() {
+            @Override
+            public void onDateSelected(Calendar date, int position) {
+
+                SimpleDateFormat dateFormat = new SimpleDateFormat("MM월");
+                String getMonth = dateFormat.format(horizontalCalendar1.getSelectedDate().getTimeInMillis());
+
+                headerMonth.setText(getMonth);
+                horizontalCalendar1.refresh();
+                //Toast.makeText(RecordActivity.this,"date : "+date+"position : "+position,Toast.LENGTH_SHORT).show();
+
+            }
+
+        });
+
 
 
 

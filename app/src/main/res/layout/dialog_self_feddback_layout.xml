@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".RecordPlusActivity"
+
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
     app:cardCornerRadius="20dp"
     app:cardElevation="8dp"
+
     android:layout_margin="10dp"
+
     >
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:padding="40dp">
 
         <TextView
             android:layout_width="match_parent"
@@ -28,11 +29,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="잘한 점"
+            android:text="잘한 점 1가지"
             android:textColor="@color/main_color1"
-            android:textSize="20sp" />
+            android:textSize="15sp" />
 
         <EditText
+            android:id="@+id/self_feedback_good_point"
+            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textMultiLine"
@@ -40,14 +43,20 @@
             />
 
         <TextView
+
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="아쉬운 점"
+            android:text="아쉬운 점 1가지"
             android:textColor="@color/main_color1"
-            android:textSize="20sp" />
+            android:textSize="15sp"
+
+            />
 
         <EditText
+            android:id="@+id/self_feedback_bad_point"
+            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textMultiLine"
@@ -55,31 +64,38 @@
             />
 
         <TextView
+            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="하루 한 문장 기록 "
             android:textColor="@color/main_color1"
-            android:textSize="20sp" />
+            android:textSize="15sp" />
 
         <EditText
+            android:id="@+id/self_feedback_final"
+            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textMultiLine"
             android:textSize="15sp"
             />
         <TextView
+            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="총 별점"
             android:textColor="@color/main_color1"
-            android:textSize="20sp" />
+            android:textSize="15sp" />
+
         <RatingBar
+            android:layout_marginTop="20dp"
+            android:id="@+id/self_feedback_rating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:stepSize="0.5"
+            android:isIndicator="false"
+            android:numStars="5"
             android:rating="3"
-            android:background=""
-
+            android:stepSize="0.5"
             />
 
 
