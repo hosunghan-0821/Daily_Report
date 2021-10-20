@@ -1,6 +1,5 @@
 package com.example.daily_report;
 
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +9,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 public class DailyRoutineAdapter extends RecyclerView.Adapter<DailyRoutineAdapter.DailyRoutineViewHolder> {
 
+    private OnRoutineItemClickListener listener;
+    private ArrayList<DailyRoutineData> routineDataList;
+
+    public DailyRoutineAdapter(ArrayList<DailyRoutineData> routineDataList) {
+        this.routineDataList=routineDataList;
+    }
 
     @NonNull
     @Override
@@ -26,11 +33,25 @@ public class DailyRoutineAdapter extends RecyclerView.Adapter<DailyRoutineAdapte
     @Override
     public void onBindViewHolder(@NonNull DailyRoutineAdapter.DailyRoutineViewHolder holder, int position) {
 
+        holder.routineContent.setText(routineDataList.get(position).getRoutineContent().toString());
+        holder.routineType.setText(routineDataList.get(position).getRoutineTime().toString());
+        if(!routineDataList.get(position).isCheckBox()){
+           holder.checkBox.setChecked(false);
+        }
+        else{
+            holder.checkBox.setChecked(true);
+        }
+
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return routineDataList.size();
+    }
+
+    public void setOnclickListener(OnRoutineItemClickListener listener){
+        this.listener=listener;
+
     }
 
     public class DailyRoutineViewHolder extends RecyclerView.ViewHolder{
@@ -46,7 +67,58 @@ public class DailyRoutineAdapter extends RecyclerView.Adapter<DailyRoutineAdapte
 
             //onclickliistener 만들기
 
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    int position = getAbsoluteAdapterPosition();
+                    if(listener!=null){
+                        listener.setItemClick(DailyRoutineViewHolder.this,view,position);
+                    }
+                }
+            });
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+
+                    int position = getAbsoluteAdapterPosition();
+
+                    if(listener!=null){
+                        listener.onItemLongClick(DailyRoutineViewHolder.this,view,position);
+
+                        return true;
+                    }
+
+                    return false;
+                }
+            });
+
+
+            checkBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position =getAbsoluteAdapterPosition();
+                    if(routineDataList.get(position).isCheckBox()){
+
+                        routineDataList.get(position).setCheckBox(false);
+                        DailyRoutineAdapter.this.notifyItemChanged(position);
+
+                    }
+                    else{
+                        routineDataList.get(position).setCheckBox(true);
+                        DailyRoutineAdapter.this.notifyItemChanged(position);
+
+                    }
+
+                }
+            });
+
         }
+    }
+
+    public interface OnRoutineItemClickListener{
+         void setItemClick(DailyRoutineAdapter.DailyRoutineViewHolder dailyRoutineViewHolder, View itemView, int position);
+        void onItemLongClick(DailyRoutineAdapter.DailyRoutineViewHolder dailyRoutineViewHolder,View itemView,int position);
     }
 
 }

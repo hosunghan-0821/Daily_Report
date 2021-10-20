@@ -2,6 +2,7 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
 
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
     app:cardCornerRadius="20dp"
@@ -35,12 +36,12 @@
 
         <EditText
             android:id="@+id/self_feedback_good_point"
-            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:inputType="textMultiLine"
             android:textSize="15sp"
-            />
+            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
         <TextView
 
@@ -56,12 +57,12 @@
 
         <EditText
             android:id="@+id/self_feedback_bad_point"
-            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:inputType="textMultiLine"
             android:textSize="15sp"
-            />
+            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
         <TextView
             android:layout_marginTop="20dp"
@@ -73,12 +74,12 @@
 
         <EditText
             android:id="@+id/self_feedback_final"
-            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:inputType="textMultiLine"
             android:textSize="15sp"
-            />
+            tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
         <TextView
             android:layout_marginTop="20dp"
             android:layout_width="match_parent"
@@ -88,15 +89,15 @@
             android:textSize="15sp" />
 
         <RatingBar
-            android:layout_marginTop="20dp"
             android:id="@+id/self_feedback_rating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:isIndicator="false"
             android:numStars="5"
             android:rating="3"
             android:stepSize="0.5"
-            />
+            tools:ignore="SpeakableTextPresentCheck" />
 
 
 

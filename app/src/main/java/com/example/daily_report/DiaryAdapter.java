@@ -78,6 +78,7 @@ public class DiaryAdapter extends RecyclerView.Adapter<DiaryAdapter.DiaryViewHol
                     if(listener != null){
 
                         listener.onItemClick(DiaryViewHolder.this,view,position);
+
                     }
                 }
             });

@@ -14,6 +14,9 @@
         android:theme="@style/Theme.Daily_Report"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".DailyRoutinePlusActivity"
+            android:exported="true" />
+        <activity
             android:name=".DailyRoutineActivity"
             android:exported="true" />
         <activity
@@ -33,9 +36,6 @@
             android:exported="true" />
         <activity
             android:name=".CalenderActivity"
-            android:exported="true" />
-        <activity
-            android:name=".example_activity"
             android:exported="true" />
         <activity
             android:name=".MainActivity"

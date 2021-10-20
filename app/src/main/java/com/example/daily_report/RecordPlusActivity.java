@@ -515,6 +515,8 @@ public class RecordPlusActivity extends AppCompatActivity {
                 plusDialog.setNegativeButton("취소", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        InputMethodManager immhide = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                        immhide.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
                         dialogInterface.dismiss();
                     }
                 });

@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.routineButton:
                         Intent i5 =new Intent(MainActivity.this,DailyRoutineActivity.class);
+                        i5.putExtra("date",date_.getText().toString());
                         startActivity(i5);
 
                 }

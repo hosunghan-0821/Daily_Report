@@ -221,9 +221,6 @@ public class DiaryActivity extends AppCompatActivity {
             public void onClick(View view) {
 
 
-
-              
-
                 view= LayoutInflater.from(DiaryActivity.this).inflate(R.layout.dialog_self_feddback_layout,null,false);
 
                 EditText selfFeedbackFinal =view.findViewById(R.id.self_feedback_final);
