@@ -38,7 +38,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
         //이 부분에서는 view를 만들고, view를 갖고 있는 customViewHolder를 만들어준다.
         //customViewholder 인 RecrodViewHolder는  선언되는 부분에서 각 요소에 대해xml에 어떤 영역과 매치되는지 설정해준다 아래쪽에 선언해놓은 class봐라
 
-        Log.e("123", "my message : onCreateViewHolder 이건 아마 한번만 만들어두고 재활용해서 쓸거임");
+        Log.e("123", "my message : onCreateViewHolder ()");
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_record_layout, parent, false);
         RecordViewHolder recordViewHolder = new RecordViewHolder(view, listener);
         return recordViewHolder;
@@ -47,7 +47,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
     @Override
     public void onBindViewHolder(@NonNull RecordViewHolder recordViewHolder, int position) {
 
-        Log.e("123","my message : onBindViewHolder 이건 요소 추가할 때마다, 발생시킬거 같은데");
+        Log.e("123","my message : onBindViewHolder ()");
         recordViewHolder.startTime.setText(recordList.get(position).getStartTime());
         recordViewHolder.finishTime.setText(recordList.get(position).getFinishTime());
         recordViewHolder.actContent.setText(recordList.get(position).getActContent());
@@ -63,7 +63,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
     @Override
     public int getItemCount() {
 
-        //Log.e("123","my message : getItemCount 여러번 실행될 것으로 생각 순서를 잘 파악하자    갯수 : "+recordList.size());
+        Log.e("123","my message : getItemCount 여러번 실행될 것으로 생각 순서를 잘 파악하자    갯수 : "+recordList.size());
         return (null != recordList ? recordList.size() : 0);
     }
 
@@ -84,6 +84,9 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
 
     public void setItemClickListener(OnRecordItemClickListener listener) {
         this.listener = listener;
+    }
+    public void setRecordList(ArrayList<RecordData> recordList){
+        this.recordList=recordList;
     }
 
 
@@ -113,7 +116,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
                 @Override
                 public void onClick(View view) {
 
-                    Log.d("123","my message: RecordAdapter customviewholder 에서 생성자로 존재하는  onClick override 함수 ");
+                    //Log.d("123","my message: RecordAdapter customviewholder 에서 생성자로 존재하는  onClick override 함수 ");
                     int position = getAbsoluteAdapterPosition();
                     if(listener!=null){
                         listener.onItemClick(RecordViewHolder.this,view,position);

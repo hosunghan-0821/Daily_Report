@@ -53,11 +53,11 @@ public class RecordActivity extends AppCompatActivity {
     private static final String TAG = "RecordActivity";
 
     private Button recordPlusButton;
-
     private RecordAdapter recordAdapter;
     private RecyclerView recordRecyclerView;
     private LinearLayoutManager linearLayoutManager;
     private ArrayList<RecordData> recordList;
+
 
 
     //추가하기 버튼을 누르면 새로운 액티비티로 이동 후, 정보들을 callback할 때, 경우에 따라서 어떻게 행동할지 정의하는 선언 및 함수정의
@@ -66,7 +66,6 @@ public class RecordActivity extends AppCompatActivity {
             new ActivityResultCallback<ActivityResult>() {
                 @Override
                 public void onActivityResult(ActivityResult result) {
-
 
                     if (result.getResultCode() == RESULT_OK) {
 
@@ -89,16 +88,20 @@ public class RecordActivity extends AppCompatActivity {
 
                             //RecordPlusActivity에서 사진을 잘 전송할 경우  전송한 사진을 기반으로, recyclerView만들기
                             RecordData recordData = new RecordData(image, startTime, finishTime, actContent, concentrate);
+                            Log.e("123","recordList RecordData 추가 전 : "+ recordList);
                             recordList.add(recordData);
+                            Log.e("123","recordList RecordData 추가 후 : "+ recordList);
                             recordAdapter.notifyDataSetChanged();
+                            MySharedPreference.setRecordArrayList(RecordActivity.this,MainActivity.dateControl,recordList);
 
                         } catch (Exception e) {
-                            Log.e(TAG, "message : 사진 안찍어서 오류67");
+                            //Log.e(TAG, "message : 사진 안찍어서 오류67");
                             //RecordPlusActivity에서 사진을 안찍어서 전송할 경우, 전송한 사진 말고 기본 사진을 갖고 recyclerView만들기
                             RecordData recordData = new RecordData(null, startTime, finishTime, actContent, concentrate);
                             recordList.add(recordData);
                             recordAdapter.notifyDataSetChanged();
-                            Log.e("123", "my message : adapter.notifyDataSetChanged() 뒤에 찍는 로그");
+                            MySharedPreference.setRecordArrayList(RecordActivity.this,MainActivity.dateControl,recordList);
+                            //Log.e("123", "my message : adapter.notifyDataSetChanged() 뒤에 찍는 로그");
 
 
                         }
@@ -132,6 +135,7 @@ public class RecordActivity extends AppCompatActivity {
                         RecordData item = new RecordData(image,bundle.getString("startTime"),bundle.getString("finishTime"),bundle.getString("actContent"),bundle.getString("concentrate"));
                         recordAdapter.setItem(position, item);
                         recordAdapter.notifyItemChanged(position);
+                        MySharedPreference.setRecordArrayList(RecordActivity.this,MainActivity.dateControl,recordList);
 
                     }
 
@@ -150,6 +154,7 @@ public class RecordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record);
 
+
         //recyclerview 선언하고, recyclerView 에 장착할 것들 => layoutManger + Adapter
         //adapter는 어떤 데이터 리스트들을 처리할 것인지 생성자로 객체 인스턴스화 시키고, 생성
 
@@ -161,13 +166,19 @@ public class RecordActivity extends AppCompatActivity {
         recordAdapter = new RecordAdapter(recordList);
         recordRecyclerView.setAdapter(recordAdapter);
 
+        //Activity 시작할 떄, 당일 날짜를 기본 세팅으로 저장해놨기 때문에, 그에 해당하는 RecordRecyclerView를 불러와야함.
+        Intent recordGetIntent = getIntent();
+        MainActivity.dateControl=recordGetIntent.getStringExtra("date");
+        recordList=MySharedPreference.getRecordArrayList(RecordActivity.this,MainActivity.dateControl);
+        recordAdapter.setRecordList(recordList);
+        recordAdapter.notifyDataSetChanged();
 
         //  각, itemView 클릭할시 행동하는 함수 정의
         //  interface listener를 만들어서, 리사이클러뷰 있는 곳에서 클릭이벤트 재정의 한다.
         recordAdapter.setItemClickListener(new OnRecordItemClickListener() {
             @Override
             public void onItemClick(RecordAdapter.RecordViewHolder recordViewHolder, View view, int position) {
-                Log.d("123", "my message: RecordActivity 에서 실행 되는 onItemClick 함수 ");
+                //Log.d("123", "my message: RecordActivity 에서 실행 되는 onItemClick 함수 ");
 
                 // 아이템 클릭했을 시, 그에 해당하는 정보를 번들에 넣고 recordPlusActivity로 화면 전환하는 상황.
                 RecordData item = recordAdapter.getItem(position);
@@ -212,6 +223,7 @@ public class RecordActivity extends AppCompatActivity {
 
                         recordList.remove(position);
                         recordAdapter.notifyItemRemoved(position);
+                        MySharedPreference.setRecordArrayList(RecordActivity.this,MainActivity.dateControl,recordList);
                         dialogInterface.dismiss();
                         //Log.e("123","my message : RecordActivity에 있는 onItemLongclick 재정의 2");
 
@@ -238,8 +250,6 @@ public class RecordActivity extends AppCompatActivity {
         Calendar endDate = Calendar.getInstance();
         endDate.add(Calendar.MONTH, 0);
 
-
-
         HorizontalCalendar.Builder horizontalCalendar = new HorizontalCalendar.Builder(this, R.id.calendarView);
         horizontalCalendar.range(startDate,endDate);
         horizontalCalendar.datesNumberOnScreen(5);
@@ -261,10 +271,33 @@ public class RecordActivity extends AppCompatActivity {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("MM월");
                 String getMonth = dateFormat.format(horizontalCalendar1.getSelectedDate().getTimeInMillis());
 
-                headerMonth.setText(getMonth);
-                horizontalCalendar1.refresh();
-                //Toast.makeText(RecordActivity.this,"date : "+date+"position : "+position,Toast.LENGTH_SHORT).show();
+                SimpleDateFormat dateForamtControl= new SimpleDateFormat("yyyy-MM-dd-E");
+                MainActivity.dateControl=dateForamtControl.format(horizontalCalendar1.getSelectedDate().getTimeInMillis());
 
+                Log.e("123","날짜 바뀌는거 제대로 되는지 확인 : "+MainActivity.dateControl);
+
+                headerMonth.setText(getMonth);
+
+
+                recordList=MySharedPreference.getRecordArrayList(RecordActivity.this,MainActivity.dateControl);
+                Log.e("123","recordList 날짜에 맞는 리스트로 가져오는지 확인 : "+ recordList);
+
+                /*  if(recordList!=null){
+                    recordAdapter.setRecordList(recordList);
+                    recordAdapter.notifyDataSetChanged();
+                }
+                else{
+                    Log.e("123","recordList null 일 때 초기화 전 : "+ recordList);
+                    recordList=new ArrayList<RecordData>();
+                    recordAdapter.setRecordList(recordList);
+                    Log.e("123","recordList null 일 때 초기화 후 : "+ recordList);
+                    recordAdapter.notifyDataSetChanged();
+                }*/
+
+                recordAdapter.setRecordList(recordList);
+                recordAdapter.notifyDataSetChanged();
+                //Toast.makeText(RecordActivity.this,"date : "+date+"position : "+position,Toast.LENGTH_SHORT).show();
+                horizontalCalendar1.refresh();
             }
 
         });

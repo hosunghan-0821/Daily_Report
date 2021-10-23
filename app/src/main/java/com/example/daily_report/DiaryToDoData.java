@@ -5,7 +5,7 @@ public class DiaryToDoData {
     private String toDoListContent,toDoListNumber;
     private boolean checkBox;
 
-    public DiaryToDoData(String toDoListContent, String toDoListNumber, boolean checkBox) {
+    public DiaryToDoData(String toDoListContent, boolean checkBox) {
         this.toDoListContent = toDoListContent;
         this.toDoListNumber = toDoListNumber;
         this.checkBox = checkBox;

@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Button diaryButton, recordButton, statisticsButton, settingButton,routineButton;
     private TextView date_;
+    static String dateControl;
 
 
 
@@ -46,10 +47,12 @@ public class MainActivity extends AppCompatActivity {
         // 시스템으로부터 날짜 받아오는 코드
         long now =System.currentTimeMillis();
         Date date= new Date(now);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-E");
         String getDay = dateFormat.format(date);
+        dateControl=dateFormat.format(date);
         date_=findViewById(R.id.date);
-        date_.setText(getDay);
+        date_.setText(dateControl);
+
 
 
         //onclickListener click 객체를 따로 만들어서 각 요소마다 onclickListner 장착 시켜줌
@@ -59,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
                 switch(view.getId()){
                     case R.id.RecordButton:
                         Intent i1 =new Intent (MainActivity.this,RecordActivity.class);
+                        i1.putExtra("date",date_.getText().toString());
                         startActivity(i1);
                         break;
                     case R.id.diaryButton:

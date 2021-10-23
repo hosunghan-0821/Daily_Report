@@ -25,6 +25,7 @@ import java.util.ArrayList;
 public class EveningRoutineFragment extends Fragment {
     private TextView headerText;
 
+
     RecyclerView routineRecyclerview;
     DailyRoutineAdapter dailyRoutineAdapter;
     LinearLayoutManager linearLayoutManager;
@@ -157,6 +158,9 @@ public class EveningRoutineFragment extends Fragment {
         if (!resumeCheck) {
 
             bundle = this.getArguments();
+            Bundle newBundle = new Bundle();
+            newBundle = null;
+            this.setArguments(newBundle);
 
         }
         Log.e("123", "bundle로 막기 : " + bundle + "resumeCheck : " + resumeCheck);

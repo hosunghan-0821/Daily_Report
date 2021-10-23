@@ -60,6 +60,9 @@ public class DiaryAdapter extends RecyclerView.Adapter<DiaryAdapter.DiaryViewHol
         this.listener=listener;
     }
 
+    public void setDiaryToDoDataList(ArrayList<DiaryToDoData> diaryToDoDataList){
+        this.diaryToDoDataList=diaryToDoDataList;
+    }
     public class DiaryViewHolder extends RecyclerView.ViewHolder{
 
         protected TextView toDoListNumber,toDoListContent;
@@ -92,12 +95,16 @@ public class DiaryAdapter extends RecyclerView.Adapter<DiaryAdapter.DiaryViewHol
                     if(diaryToDoDataList.get(position).isCheckBox()){
 
                         diaryToDoDataList.get(position).setCheckBox(false);
+
                         DiaryAdapter.this.notifyItemChanged(position);
+                        MySharedPreference.setToDoList(view.getContext(),MainActivity.dateControl,diaryToDoDataList);
+
 
                     }
                     else{
                         diaryToDoDataList.get(position).setCheckBox(true);
                         DiaryAdapter.this.notifyItemChanged(position);
+                        MySharedPreference.setToDoList(view.getContext(),MainActivity.dateControl,diaryToDoDataList);
 
                     }
                 }

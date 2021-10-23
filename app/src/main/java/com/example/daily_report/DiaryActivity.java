@@ -11,6 +11,7 @@ import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,6 +25,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class DiaryActivity extends AppCompatActivity {
 
@@ -34,6 +37,7 @@ public class DiaryActivity extends AppCompatActivity {
     private RecyclerView diaryRecyclerView;
     private LinearLayoutManager linearLayoutManager;
     private DiaryAdapter diaryAdapter;
+
 
 
     @Override
@@ -51,6 +55,7 @@ public class DiaryActivity extends AppCompatActivity {
         headerCalender = (ImageView) findViewById(R.id.header_calender_image);
         toDoListPlus = (ImageView) findViewById(R.id.todo_list_plus);
 
+
         //recyclerview 선언하고, recyclerView 에 장착할 것들 => layoutManger + Adapter
 
         diaryRecyclerView = findViewById(R.id.recyclerview_todo_list);
@@ -61,8 +66,17 @@ public class DiaryActivity extends AppCompatActivity {
 
         diaryRecyclerView.setLayoutManager(linearLayoutManager);
         diaryRecyclerView.setAdapter(diaryAdapter);
-        // diaryRecyclerView.setHasFixedSize(true);
+        //diaryRecyclerView.setHasFixedSize(true);
 
+        //화면전환할 때 현재 날짜 값 인텐트로 보낸거 받아서, header에 날짜 관련 내용 표시
+        Intent diaryGetIntent = getIntent();
+        headerDate.setText(diaryGetIntent.getStringExtra("date"));
+        MainActivity.dateControl=headerDate.getText().toString();
+
+        //onCreate 할 떄 기본 날짜에 맞춰서, recyclerView 보여주기.
+        diaryToDoDataList=MySharedPreference.getToDoListArrayList(DiaryActivity.this,MainActivity.dateControl);
+        diaryAdapter.setDiaryToDoDataList(diaryToDoDataList);
+        diaryAdapter.notifyDataSetChanged();
         // 좌우로 스와이프 할 때 삭제 하려고 만든 itemtouchhelper 객체
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
@@ -75,6 +89,7 @@ public class DiaryActivity extends AppCompatActivity {
                 int position = viewHolder.getAbsoluteAdapterPosition();
                 diaryToDoDataList.remove(position);
                 diaryAdapter.notifyDataSetChanged();
+                MySharedPreference.setToDoList(DiaryActivity.this,headerDate.getText().toString(),diaryToDoDataList);
 
             }
         };
@@ -99,6 +114,7 @@ public class DiaryActivity extends AppCompatActivity {
 
                         diaryToDoDataList.get(position).setToDoListContent(todo.getText().toString());
                         diaryAdapter.notifyItemChanged(position);
+                        MySharedPreference.setToDoList(DiaryActivity.this,headerDate.getText().toString(),diaryToDoDataList);
                         dialogInterface.dismiss();
                     }
                 });
@@ -108,6 +124,7 @@ public class DiaryActivity extends AppCompatActivity {
                         dialogInterface.dismiss();
                     }
                 });
+
 
                 updateDialog.show();
             }
@@ -126,10 +143,6 @@ public class DiaryActivity extends AppCompatActivity {
             headerDate.setText(savedInstanceState.getString("headDate"));
         }
         */
-
-        //화면전환할 때 현재 날짜 값 인텐트로 보낸거 받아서, 선언한곳에다가 표시해주기
-        Intent diaryGetIntent = getIntent();
-        headerDate.setText(diaryGetIntent.getStringExtra("date"));
 
 
         //Plus 버튼 눌렀을 때 나타나는 것들
@@ -152,13 +165,16 @@ public class DiaryActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         String text = toDo.getText().toString();
 
-                        DiaryToDoData data = new DiaryToDoData(text, "0", false);
+                        DiaryToDoData data = new DiaryToDoData(text,  false);
 
                         diaryToDoDataList.add(data);
-                        Log.e("123", "my message add(data)");
                         diaryAdapter.notifyItemInserted(diaryToDoDataList.size() - 1);
-                        Log.e("123", "my message notifyDataSet tododatalist size : " + diaryToDoDataList.size());
+
+                        MySharedPreference.setToDoList(DiaryActivity.this,headerDate.getText().toString(),diaryToDoDataList);
                         dialogInterface.dismiss();
+                        /*for(int j=0; j<diaryToDoDataList.size();j++){
+                            Log.e("123","index J +"+j+" - checkBox 상태 : "+diaryToDoDataList.get(j).isCheckBox());
+                        }*/
                     }
                 });
 
@@ -176,44 +192,6 @@ public class DiaryActivity extends AppCompatActivity {
 
             }
         });
-
-        //TODOLIST 터치했을 때, 다이얼로그를 이용해서 값 입력받고 저장하는코드 기본적인 다이얼로그 만들기
-        /*    toDoList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                AlertDialog.Builder toDoListDialog= new AlertDialog.Builder(DiaryActivity.this);
-                final EditText toDo= new EditText(DiaryActivity.this);
-
-                //다이얼로그 안의 내용들 추가해주는 코드
-                toDoListDialog.setMessage("오늘의 할일을 입력하세요");
-                toDoListDialog.setView(toDo);
-
-                //toDoList 클릭했을 때, 다이얼로그가 보이게 해주는 코드
-
-                //확인 버튼을 눌렀을 때, 일어나는 행동들
-                toDoListDialog.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        String text = toDo.getText().toString();
-                        toDoList.setText(text);
-                        //dialogInterface.dismiss();
-                    }
-                });
-
-
-                //취소 버튼을 눌렀을 때, 일어나는 행동들
-                toDoListDialog.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                });
-
-                toDoListDialog.show();
-
-            }
-        });*/
 
         //셀프피드백 기록하려고 할때
         selfFeedBackPlus.setOnClickListener(new View.OnClickListener() {
@@ -258,44 +236,6 @@ public class DiaryActivity extends AppCompatActivity {
 
             }
         });
-        /*
-        feedBackText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                AlertDialog.Builder feedBackDialog= new AlertDialog.Builder(DiaryActivity.this);
-                final EditText feedBack= new EditText(DiaryActivity.this);
-
-                //다이얼로그 안의 내용들 추가해주는 코드
-                feedBackDialog.setMessage("오늘 스스로를 돌아보세요 ");
-                feedBackDialog.setView(feedBack);
-
-                //확인 버튼을 눌렀을 때, 일어나는 행동들
-                feedBackDialog.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        String text = feedBack.getText().toString();
-                        feedBackText.setText(text);
-                        dialogInterface.dismiss();
-                    }
-                });
-
-
-                //취소 버튼을 눌렀을 때, 일어나는 행동들
-                feedBackDialog.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                });
-
-                //feedback 텍스트 클릭했을 때, 다이얼로그가 보이게 해주는 코드
-                feedBackDialog.show();
-
-            }
-        });
-
-        */
 
         //상단의 달력 버튼 눌렀을 때, datePickerDialog 를 활용하여, 날짜를 가져오고, 그 날짜에 따라서 데이터 기록들을 저장해보는 기능을 수행해보자
         DatePickerDialog datePickerDialog = new DatePickerDialog(DiaryActivity.this, new DatePickerDialog.OnDateSetListener() {
@@ -304,25 +244,26 @@ public class DiaryActivity extends AppCompatActivity {
 
                 //기존에 저장했던 todolist 내용들을 불러오고, 날짜도 바꾸기
                 monthOfYear += 1;
-                headerDate.setText(year + "-" + monthOfYear + "-" + dayOfMonth);
-                SharedPreferences sf = getSharedPreferences("sFile", MODE_PRIVATE);
-                String text = sf.getString(headerDate.getText().toString(), "");
-                //toDoList.setText(text);
+
+
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(year,monthOfYear-1,dayOfMonth);
+                Date date =calendar.getTime();
+                java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("yyyy-MM-dd-E");
+                MainActivity.dateControl =dateFormat.format(date);
+                headerDate.setText(  MainActivity.dateControl);
+                diaryToDoDataList=MySharedPreference.getToDoListArrayList(DiaryActivity.this,  MainActivity.dateControl);
+                diaryAdapter.setDiaryToDoDataList(diaryToDoDataList);
+                diaryAdapter.notifyDataSetChanged();
 
             }
-        }, 2021, 10 - 1, 11);
+        }, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
 
         headerCalender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 datePickerDialog.show();
 
-                //달력 클릭했을 때, 기존에 있던 내용들 저장하기 sharedPreferences 를 이용하여서
-                SharedPreferences sharedPreferences = getSharedPreferences("sFile", MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                //editor.putString(headerDate.getText().toString(), toDoList.getText().toString());
-                //editor.clear();
-                //editor.apply();
             }
         });
 
