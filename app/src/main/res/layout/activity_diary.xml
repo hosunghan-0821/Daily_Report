@@ -204,16 +204,62 @@
                         android:layout_height="1dp"
                         android:background="@color/black" />
 
-                    <TextView
-                        android:id="@+id/self_feedback"
+                    <LinearLayout
+                        android:layout_marginTop="10dp"
+                        android:padding="5dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="top|left"
-                        android:hint="Today's Self FeedBack "
-                        android:minHeight="48dp"
-                        android:scrollbars="vertical"
-                        android:textColor="@color/black"
-                        android:textSize="15sp" />
+                        android:orientation="horizontal"
+                        >
+                        <TextView
+                            android:layout_marginRight="30dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="오늘 한줄 평 :    "
+                            android:textColor="@color/main_color1"
+                            android:gravity="center"
+
+                            />
+                        <TextView
+
+                            android:id="@+id/self_feedback"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:hint="Today's Self FeedBack "
+                            android:scrollbars="vertical"
+
+                            android:textColor="@color/black"
+                            android:textSize="15sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:padding="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+                        <TextView
+                            android:layout_marginRight="15dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="오늘 나의 평점 : "
+                            android:textColor="@color/main_color1"
+                            android:gravity="center"
+                            />
+
+                        <RatingBar
+                            android:id="@+id/self_rating"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+
+                            android:numStars="5"
+                            android:rating="3"
+                            android:stepSize="0.5"
+                            tools:ignore="SpeakableTextPresentCheck">
+
+                        </RatingBar>
+                    </LinearLayout>
+
 
 
                 </LinearLayout>

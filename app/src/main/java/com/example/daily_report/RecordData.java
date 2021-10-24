@@ -6,45 +6,31 @@ import java.io.Serializable;
 
 public class RecordData  {
 
-    private int recordImage;
-    private String startTime,finishTime,actContent,concentrate;
-    private Bitmap bitmapImage;
+
+    private String startTime,finishTime,actContent,concentrate,fileName;
+
 
     public RecordData(){}
-    public RecordData(Bitmap image,String startTime, String finishTime, String actContent, String concentrate){
+    public RecordData(String fileName,String startTime, String finishTime, String actContent, String concentrate){
 
-        this.bitmapImage=image;
+        this.fileName=fileName;
         this.startTime = startTime;
         this.finishTime = finishTime;
         this.actContent = actContent;
         this.concentrate = concentrate;
-    }
-    public RecordData(int recordImage, String startTime, String finishTime, String actContent, String concentrate) {
-        this.recordImage = recordImage;
-        this.startTime = startTime;
-        this.finishTime = finishTime;
-        this.actContent = actContent;
-        this.concentrate = concentrate;
-    }
 
-    public int getRecordImage() {
-        return recordImage;
-    }
-
-    public void setRecordImage(int recordImage) {
-        this.recordImage = recordImage;
-    }
-
-    public Bitmap getBitmapImage() {
-        return bitmapImage;
-    }
-
-    public void setBitmapImage(Bitmap bitmapImage) {
-        this.bitmapImage = bitmapImage;
     }
 
     public String getStartTime() {
         return startTime;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     public void setStartTime(String startTime) {

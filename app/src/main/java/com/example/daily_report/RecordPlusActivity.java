@@ -90,15 +90,18 @@ public class RecordPlusActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
 
-        Calendar currentTime = Calendar.getInstance();
-        int hour = currentTime.get(Calendar.HOUR_OF_DAY);
-        int minute = currentTime.get(Calendar.MINUTE);
 
         //화면 레이아웃에서 불러서 생성
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record_plus);
 
-        //  Spinner 관련 코드
+
+        //현재 시간 분 을 캘린더 instance() 로부터 얻는 코드
+        Calendar currentTime = Calendar.getInstance();
+        int hour = currentTime.get(Calendar.HOUR_OF_DAY);
+        int minute = currentTime.get(Calendar.MINUTE);
+
+        //  Spinner 관련 코드 -> recyclerView 처럼, adapter를 활용하는 방식
         Spinner spinner = findViewById(R.id.concentrate_spinner);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, items);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -115,15 +118,14 @@ public class RecordPlusActivity extends AppCompatActivity {
 
 
         //Dialog 에 적용할 RecyclerView 선언해두자.
-
-
-
         // 생성될 때 종료시간을 현재 시간으로 세팅해두기
-
 
         //수정할 때, updateLauncher에 의해서 각종 정보들을 넘겨받고, 번들이 NULL이 아니라면, 각종 데이터들을 기록 추가버튼에 설정하는거지
         Intent i = getIntent();
         Bundle bundleCheck = getIntent().getExtras();
+
+        //만약 수정하기 버튼에 의해 recordPlusActivity가 실행 됬을 경우.
+        // 즉 수정할 경우 기본적으로 text들 살짝식 바꿔주고, 데이터 정보를 각 해당요소마다 세팅해줘야하는 작업이 필요하다.
 
         if (bundleCheck != null) {
             position =bundleCheck.getInt("position");
@@ -134,12 +136,28 @@ public class RecordPlusActivity extends AppCompatActivity {
             finishTime.setText(bundleCheck.getString("finishTime"));
             actContent.setText(bundleCheck.getString("actContent"));
             for (int j = 1; j < 3; j++) {
+
                 if (spinner.getSelectedItem().toString().equals(bundleCheck.getString("concentrate"))) {
                     break;
                 } else {
                     spinner.setSelection(j);
                 }
+
             }
+            if(bundleCheck.getString("image")==null){
+                contentImage.setImageResource(R.drawable.camera_image);
+
+            }
+            else if(bundleCheck.getString("image").equals("sampleImage")){
+                contentImage.setImageResource(R.drawable.camera_image);
+            }
+            else{
+                String imagePath =bundleCheck.getString("image");
+                Bitmap image =BitmapFactory.decodeFile(imagePath);
+                contentImage.setImageBitmap(image);
+            }
+
+            /*
             if (bundleCheck.getByteArray("image") == null) {
 
             } else {
@@ -147,6 +165,7 @@ public class RecordPlusActivity extends AppCompatActivity {
                 Bitmap image = BitmapFactory.decodeByteArray(arr, 0, arr.length);
                 contentImage.setImageBitmap(image);
             }
+            */
 
             //  수정하기 버튼 눌렀을 때, 데이터 정보 옮기는 코드 => RecyclerView 수정할 때 실행
             //  RecyclerView 의 포지션에 접근해서 정보를 수정하기 or Intent로 정보를 전달해서 그 함수 내에서, recyclerView 정보의 내용을 수정할지.
@@ -164,12 +183,6 @@ public class RecordPlusActivity extends AppCompatActivity {
                     String actC = actContent.getText().toString();
                     String concentrate = spinner.getSelectedItem().toString();
 
-                    //기존에 쓴 내용 저장하기  -> (실험용) 나쁘진 않다. 나중에 쓸만한 기능
-                /*SharedPreferences sharedPreferences = getSharedPreferences("sFile", MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("startTime", TimeS);
-                editor.apply();*/
-
                     //정보를 변수에 넣고 나머지는 번들에 넣기.
                     Bundle bundle = new Bundle();
                     bundle.putString("startTime", TimeS);
@@ -183,12 +196,14 @@ public class RecordPlusActivity extends AppCompatActivity {
 
                     //contentimage에 있는 사진 정보를 drawble로 바꾸고 -> drawable 파일을 비트맵으로 만든후 -> 바이트로 만든다.
                     try {
+
                         BitmapDrawable drawable = (BitmapDrawable) contentImage.getDrawable();
                         Bitmap bitmap = drawable.getBitmap();
                         ByteArrayOutputStream stream = new ByteArrayOutputStream();
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                         byte[] byteArray = stream.toByteArray();
                         bundle.putByteArray("image", byteArray);
+
                     } catch (Exception e) {
                         System.out.println("사진 안찍어서 오류");
                     }
@@ -209,21 +224,21 @@ public class RecordPlusActivity extends AppCompatActivity {
                             change = false;
                         }
                     }
+
+                    //수정하는 상황이 아닐 경우, 즉 새로 활동유형을  추가할 경우
                     if (change == true&&bundleCheck==null) {
                         i.putExtras(bundle);
                         setResult(Activity.RESULT_OK, i);
                         finish();
                     }
+
+                    //수정하는 상황일 경우, 기존의 활동유형을 변경하는 경우
                     if(change==true &&bundleCheck!=null){
                         i.putExtras(bundle);
                         setResult(100, i);
                         finish();
 
                     }
-
-
-                    //Log.e(TAG, "일정을 추가하고 정상 종료합니다");
-
                 }
             });
 
@@ -249,7 +264,6 @@ public class RecordPlusActivity extends AppCompatActivity {
         startTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 //타임피커 생성해보자 OnTimeSet 함수오버라이드하면서
                 // 이전에 사용했던 타임피커 방법
                 /*timePickerDialogEx = TimepickerSet(timePickerDialogEx, startTime);
@@ -274,7 +288,6 @@ public class RecordPlusActivity extends AppCompatActivity {
                         timePickerDialogEx.show();
                     }
                 });*/
-
                 TimePickerDialog timePickerDialog;
                 timePickerDialog = new TimePickerDialog(RecordPlusActivity.this, android.R.style.Theme_Holo_Light_Dialog_NoActionBar, new TimePickerDialog.OnTimeSetListener() {
                     @Override
@@ -388,38 +401,22 @@ public class RecordPlusActivity extends AppCompatActivity {
                 view=view.inflate(RecordPlusActivity.this,R.layout.activity_calender,null);
                 view= LayoutInflater.from(RecordPlusActivity.this).inflate(R.layout.recyclerview_diary_todo_layout,null,false);*/
 
-                //dialog에서 선택 박스 만들고 하나만 선택하게 하는 코드
-
-                /*
-                final CharSequence[] items = {"사과","딸기","오렌지","수박"};
-                int checkditem=-1;
-                actDialog.setSingleChoiceItems(items, checkditem, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(getApplicationContext(), "선택됨",Toast.LENGTH_SHORT).show();
-                        dialogInterface.dismiss();
-                    }
-                });
-                */
-
-                //클릭했을시 다이얼로그 생성하고, 그 안에서 리사이클러뷰를 활용
+                //클릭했을시 다이얼로그 생성하고, 그 안에서 리사이클러뷰를 활용 내용이 너무 길어서 따로 함수 빼내서 만들었다.
                 dialogShow(view);
 
             }
         });
-
-
     }
 
     //다이얼로그 만들고 리사이클러뷰  CRUD 담당 하는부분.
     public void dialogShow(View view){
+
         AlertDialog.Builder actDialog = new AlertDialog.Builder(RecordPlusActivity.this);
         AlertDialog actDialogDismiss= actDialog.create();
         view= LayoutInflater.from(RecordPlusActivity.this).inflate(R.layout.dialog_act_content_layout,null,false);
         actDialogDismiss.setView(view);
 
         plusImage=view.findViewById(R.id.act_content_plus);
-
 
         dialogRecyclerView=view.findViewById(R.id.recyclerview_dialog);
         actDataList = new ArrayList<RecordPlusActivityActData>();

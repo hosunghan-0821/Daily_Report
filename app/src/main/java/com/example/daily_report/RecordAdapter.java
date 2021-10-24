@@ -19,6 +19,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordViewHolder> implements OnRecordItemClickListener {
@@ -47,23 +48,39 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
     @Override
     public void onBindViewHolder(@NonNull RecordViewHolder recordViewHolder, int position) {
 
-        Log.e("123","my message : onBindViewHolder ()");
+        Log.e("123", "my message : onBindViewHolder ()");
         recordViewHolder.startTime.setText(recordList.get(position).getStartTime());
         recordViewHolder.finishTime.setText(recordList.get(position).getFinishTime());
         recordViewHolder.actContent.setText(recordList.get(position).getActContent());
         recordViewHolder.concentrate.setText(recordList.get(position).getConcentrate());
-        if (recordList.get(position).getBitmapImage() == null) {
+
+        if(recordList.get(position).getFileName()==null){
+            recordViewHolder.recordImage.setImageResource(R.drawable.camera_image);
+        }
+        else if(recordList.get(position).getFileName().equals("sampleImage")){
+            recordViewHolder.recordImage.setImageResource(R.drawable.camera_image);
+        }
+        else{
+            Log.e("image","absolutefilePath : "+  recordList.get(position).getFileName());
+            Bitmap bitmapImage =BitmapFactory.decodeFile( recordList.get(position).getFileName());
+            recordViewHolder.recordImage.setImageBitmap(bitmapImage);
+        }
+
+      /*
+      if (recordList.get(position).getBitmapImage() == null) {
             recordViewHolder.recordImage.setImageResource(R.drawable.camera_image);
         } else {
             recordViewHolder.recordImage.setImageBitmap(recordList.get(position).getBitmapImage());
         }
+        */
+
     }
 
 
     @Override
     public int getItemCount() {
 
-        Log.e("123","my message : getItemCount 여러번 실행될 것으로 생각 순서를 잘 파악하자    갯수 : "+recordList.size());
+        Log.e("123", "my message : getItemCount 여러번 실행될 것으로 생각 순서를 잘 파악하자    갯수 : " + recordList.size());
         return (null != recordList ? recordList.size() : 0);
     }
 
@@ -85,10 +102,10 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
     public void setItemClickListener(OnRecordItemClickListener listener) {
         this.listener = listener;
     }
-    public void setRecordList(ArrayList<RecordData> recordList){
-        this.recordList=recordList;
-    }
 
+    public void setRecordList(ArrayList<RecordData> recordList) {
+        this.recordList = recordList;
+    }
 
 
     // custom ViewHolder로써 내가 직접 만들고 각 요소들에 데이터 정보값을 넣기 위해
@@ -118,8 +135,8 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
 
                     //Log.d("123","my message: RecordAdapter customviewholder 에서 생성자로 존재하는  onClick override 함수 ");
                     int position = getAbsoluteAdapterPosition();
-                    if(listener!=null){
-                        listener.onItemClick(RecordViewHolder.this,view,position);
+                    if (listener != null) {
+                        listener.onItemClick(RecordViewHolder.this, view, position);
                     }
 
                 }
@@ -131,13 +148,13 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
 
                     int position = getAbsoluteAdapterPosition();
 
-                    if(listener!=null){
-                        listener.onItemLongClick(RecordViewHolder.this,view,position);
+                    if (listener != null) {
+                        listener.onItemLongClick(RecordViewHolder.this, view, position);
                         //Log.e("123","my message : adapter에 있는 온 롱클릭 리스너 실행2");
                         return true;
                     }
 
-                return false;
+                    return false;
                 }
             });
 
@@ -146,12 +163,14 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
 
 
     }
-    public RecordData getItem(int position){
+
+    public RecordData getItem(int position) {
 
         return recordList.get(position);
     }
-    public void setItem(int position,RecordData item){
-        recordList.set(position,item);
+
+    public void setItem(int position, RecordData item) {
+        recordList.set(position, item);
     }
 
 

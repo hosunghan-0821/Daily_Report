@@ -24,6 +24,8 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -37,7 +39,7 @@ public class DiaryActivity extends AppCompatActivity {
     private RecyclerView diaryRecyclerView;
     private LinearLayoutManager linearLayoutManager;
     private DiaryAdapter diaryAdapter;
-
+    private ArrayList<String> feedBackArrayList;
 
 
     @Override
@@ -71,12 +73,26 @@ public class DiaryActivity extends AppCompatActivity {
         //화면전환할 때 현재 날짜 값 인텐트로 보낸거 받아서, header에 날짜 관련 내용 표시
         Intent diaryGetIntent = getIntent();
         headerDate.setText(diaryGetIntent.getStringExtra("date"));
-        MainActivity.dateControl=headerDate.getText().toString();
+        MainActivity.dateControl = headerDate.getText().toString();
 
         //onCreate 할 떄 기본 날짜에 맞춰서, recyclerView 보여주기.
-        diaryToDoDataList=MySharedPreference.getToDoListArrayList(DiaryActivity.this,MainActivity.dateControl);
+        diaryToDoDataList = MySharedPreference.getToDoListArrayList(DiaryActivity.this, MainActivity.dateControl);
         diaryAdapter.setDiaryToDoDataList(diaryToDoDataList);
         diaryAdapter.notifyDataSetChanged();
+
+        //onCreate 할 때, 오늘 한줄 평 저장되어 있다면, 불러오기
+        feedBackArrayList=new ArrayList<String>();
+        feedBackArrayList=getStringArrayListFromSharedPreferences("selfFeedBack");
+        try{
+            feedBackText.setText(feedBackArrayList.get(2).toString());
+        }catch(Exception e){
+
+            Log.e("123","저장된게 없을 떄, 공백으로 설정");
+            feedBackText.setText("");
+
+        }
+
+
         // 좌우로 스와이프 할 때 삭제 하려고 만든 itemtouchhelper 객체
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
@@ -89,7 +105,7 @@ public class DiaryActivity extends AppCompatActivity {
                 int position = viewHolder.getAbsoluteAdapterPosition();
                 diaryToDoDataList.remove(position);
                 diaryAdapter.notifyDataSetChanged();
-                MySharedPreference.setToDoList(DiaryActivity.this,headerDate.getText().toString(),diaryToDoDataList);
+                MySharedPreference.setToDoList(DiaryActivity.this, headerDate.getText().toString(), diaryToDoDataList);
 
             }
         };
@@ -114,7 +130,7 @@ public class DiaryActivity extends AppCompatActivity {
 
                         diaryToDoDataList.get(position).setToDoListContent(todo.getText().toString());
                         diaryAdapter.notifyItemChanged(position);
-                        MySharedPreference.setToDoList(DiaryActivity.this,headerDate.getText().toString(),diaryToDoDataList);
+                        MySharedPreference.setToDoList(DiaryActivity.this, headerDate.getText().toString(), diaryToDoDataList);
                         dialogInterface.dismiss();
                     }
                 });
@@ -165,12 +181,12 @@ public class DiaryActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         String text = toDo.getText().toString();
 
-                        DiaryToDoData data = new DiaryToDoData(text,  false);
+                        DiaryToDoData data = new DiaryToDoData(text, false);
 
                         diaryToDoDataList.add(data);
                         diaryAdapter.notifyItemInserted(diaryToDoDataList.size() - 1);
 
-                        MySharedPreference.setToDoList(DiaryActivity.this,headerDate.getText().toString(),diaryToDoDataList);
+                        MySharedPreference.setToDoList(DiaryActivity.this, headerDate.getText().toString(), diaryToDoDataList);
                         dialogInterface.dismiss();
                         /*for(int j=0; j<diaryToDoDataList.size();j++){
                             Log.e("123","index J +"+j+" - checkBox 상태 : "+diaryToDoDataList.get(j).isCheckBox());
@@ -198,13 +214,14 @@ public class DiaryActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                ArrayList<String> arrayList = new ArrayList<String>();
 
-                view= LayoutInflater.from(DiaryActivity.this).inflate(R.layout.dialog_self_feddback_layout,null,false);
+                view = LayoutInflater.from(DiaryActivity.this).inflate(R.layout.dialog_self_feddback_layout, null, false);
 
-                EditText selfFeedbackFinal =view.findViewById(R.id.self_feedback_final);
+                EditText selfFeedbackFinal = view.findViewById(R.id.self_feedback_final);
                 EditText selfFeedbackGood = view.findViewById(R.id.self_feedback_good_point);
-                EditText selfFeedbackBad=view.findViewById(R.id.self_feedback_bad_point);
-                RatingBar ratingBar = view.findViewById(R.id.self_feedback_rating);
+                EditText selfFeedbackBad = view.findViewById(R.id.self_feedback_bad_point);
+                //RatingBar ratingBar = view.findViewById(R.id.self_feedback_rating);
                 AlertDialog.Builder feedBackDialog = new AlertDialog.Builder(DiaryActivity.this);
                 feedBackDialog.setView(view);
 
@@ -214,9 +231,13 @@ public class DiaryActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
+                        arrayList.add(selfFeedbackGood.getText().toString());
+                        arrayList.add(selfFeedbackBad.getText().toString());
+                        arrayList.add(selfFeedbackFinal.getText().toString());
+                        setStringArrayListToSharedPreferences(arrayList,"selfFeedBack");
                         // 여기서 각종 Rating bar 점수들이랑 이런 것들 저장하는곳에 저장하고, 평가를 어떻게 할 것인지는 생각해보자
                         feedBackText.setText(selfFeedbackFinal.getText().toString());
-                        Toast.makeText(DiaryActivity.this,"별점  : "+ratingBar.getRating(),Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(DiaryActivity.this,"별점  : "+ratingBar.getRating(),Toast.LENGTH_SHORT).show();
                         dialogInterface.dismiss();
                     }
                 });
@@ -245,14 +266,26 @@ public class DiaryActivity extends AppCompatActivity {
                 //기존에 저장했던 todolist 내용들을 불러오고, 날짜도 바꾸기
                 monthOfYear += 1;
 
+                //ArrayList<String> feedBackArrayList= new ArrayList<String>();
 
                 Calendar calendar = Calendar.getInstance();
-                calendar.set(year,monthOfYear-1,dayOfMonth);
-                Date date =calendar.getTime();
+                calendar.set(year, monthOfYear - 1, dayOfMonth);
+                Date date = calendar.getTime();
                 java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("yyyy-MM-dd-E");
-                MainActivity.dateControl =dateFormat.format(date);
-                headerDate.setText(  MainActivity.dateControl);
-                diaryToDoDataList=MySharedPreference.getToDoListArrayList(DiaryActivity.this,  MainActivity.dateControl);
+
+                MainActivity.dateControl = dateFormat.format(date);
+                headerDate.setText(MainActivity.dateControl);
+
+                feedBackArrayList=getStringArrayListFromSharedPreferences("selfFeedBack");
+                diaryToDoDataList = MySharedPreference.getToDoListArrayList(DiaryActivity.this, MainActivity.dateControl);
+
+                try{
+                    feedBackText.setText(feedBackArrayList.get(2).toString());
+                }catch(Exception e){
+                    Log.e("123","저장된게 없을 떄, 공백으로 설정");
+                    feedBackText.setText("");
+                }
+
                 diaryAdapter.setDiaryToDoDataList(diaryToDoDataList);
                 diaryAdapter.notifyDataSetChanged();
 
@@ -280,6 +313,47 @@ public class DiaryActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    public void setStringArrayListToSharedPreferences(ArrayList<String> arrayList,String key) {
+
+        SharedPreferences sharedPreferences = MySharedPreference.getPreferences(DiaryActivity.this, MainActivity.dateControl);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        JSONArray jsonArray = new JSONArray();
+        for (int i = 0; i < arrayList.size(); i++) {
+            jsonArray.put(arrayList.get(i));
+        }
+        if(!arrayList.isEmpty()){
+            editor.putString(key,jsonArray.toString());
+        }
+        else{
+            editor.putString(key,null);
+        }
+        editor.apply();
+    }
+    public ArrayList<String> getStringArrayListFromSharedPreferences(String key){
+
+        SharedPreferences sharedPreferences = MySharedPreference.getPreferences(DiaryActivity.this, MainActivity.dateControl);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        String stringFromJsonArray = sharedPreferences.getString(key,null);
+
+        ArrayList<String> arrayList= new ArrayList<>();
+        if(stringFromJsonArray!=null){
+
+            try{
+                JSONArray jsonArray = new JSONArray(stringFromJsonArray);
+                for(int i=0;i<jsonArray.length();i++){
+                    String data = jsonArray.optString(i);
+                    arrayList.add(data);
+                }
+            }catch(Exception e){
+
+            }
+
+        }
+        return arrayList;
     }
 
     //기존의 내용들을 stop 과 destroy 사이에서 이 함수를 호출하여 저장한다. => 나는 가로세로 전환에의한 강제 종료될 때 사용..
