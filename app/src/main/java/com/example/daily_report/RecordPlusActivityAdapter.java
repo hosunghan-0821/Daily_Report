@@ -74,6 +74,10 @@ public class RecordPlusActivityAdapter extends RecyclerView.Adapter<RecordPlusAc
         }
     }
 
+    public void setActDataList(ArrayList<RecordPlusActivityActData> arrayList){
+        actDataList=arrayList;
+
+    }
     public interface OnDialogItemClickListener {
         public void setItemClick(DialogViewHolder dialogViewHolder,View itemView, int position);
 

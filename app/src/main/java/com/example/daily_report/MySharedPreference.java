@@ -102,4 +102,39 @@ public class MySharedPreference {
         }
     }
 
+    public static void setActContentArrayList(Context context ,String fileName, ArrayList<RecordPlusActivityActData> arrayList){
+        SharedPreferences sharedPreferences = MySharedPreference.getPreferences(context,fileName);
+        Gson gson = new Gson();
+        Type arrayListType = new TypeToken<ArrayList<RecordPlusActivityActData>>(){}.getType();
+        String stringToJson = gson.toJson(arrayList,arrayListType);
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("actContent",stringToJson);
+        editor.apply();
+    }
+
+    public static ArrayList<RecordPlusActivityActData>  getActContentArrayList(Context context, String fileName){
+
+        ArrayList<RecordPlusActivityActData> savedList = new ArrayList<RecordPlusActivityActData>();
+        Gson gson = new GsonBuilder().create();
+
+        SharedPreferences sharedPreferences = getPreferences(context,fileName);
+        String stringToObject =sharedPreferences.getString("actContent",null);
+        Type arrayListType = new TypeToken<ArrayList<RecordPlusActivityActData>>(){}.getType();
+        try{
+            savedList=gson.fromJson(stringToObject,arrayListType);
+
+            if(savedList==null){
+                savedList=new ArrayList<RecordPlusActivityActData>();
+            }
+            return savedList;
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            return savedList;
+        }
+
+    }
+
+
 }

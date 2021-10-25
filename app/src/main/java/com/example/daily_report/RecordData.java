@@ -8,6 +8,7 @@ public class RecordData  {
 
 
     private String startTime,finishTime,actContent,concentrate,fileName;
+    private int hour,minute;
 
 
     public RecordData(){}
@@ -60,4 +61,21 @@ public class RecordData  {
     public void setConcentrate(String concentrate) {
         this.concentrate = concentrate;
     }
+
+    public int getHour() {
+        return hour;
+    }
+
+    public void setHour(int hour) {
+        this.hour = hour;
+    }
+
+    public int getMinute() {
+        return minute;
+    }
+
+    public void setMinute(int minute) {
+        this.minute = minute;
+    }
+
 }

@@ -61,7 +61,27 @@ public class RecordActivity extends AppCompatActivity {
     private RecyclerView recordRecyclerView;
     private LinearLayoutManager linearLayoutManager;
     private ArrayList<RecordData> recordList;
+    private int[] intTimeArray;
 
+    public int[] stringTimeToIntTime(String startTime, String finishTime) {
+        int timeArray[] = new int[2];
+
+        int startHour,startMinute,finishHour,finishMinute;
+        startHour= Integer.parseInt(startTime.substring(0, 2));
+        startMinute=Integer.parseInt(startTime.substring(3, 5));
+
+        finishHour=Integer.parseInt(finishTime.substring(0, 2));
+        finishMinute= Integer.parseInt(finishTime.substring(3, 5));
+
+        if(finishMinute<startMinute){
+            finishMinute+=60;
+            finishHour-=1;
+        }
+        timeArray[0] = finishHour-startHour;
+        timeArray[1] = finishMinute-startMinute;
+
+        return timeArray; //Index 0 : 시간 차이 Index 1 : 분 차이;;
+    }
 
     //추가하기 버튼을 누르면 새로운 액티비티로 이동 후, 정보들을 callback할 때, 경우에 따라서 어떻게 행동할지 정의하는 선언 및 함수정의
     private ActivityResultLauncher<Intent> resultLauncher = registerForActivityResult(
@@ -70,6 +90,7 @@ public class RecordActivity extends AppCompatActivity {
                 @Override
                 public void onActivityResult(ActivityResult result) {
 
+                    intTimeArray= new int[2];
                     long now = System.currentTimeMillis();
                     Date date = new Date(now);
                     SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd_HHmmss");
@@ -105,6 +126,10 @@ public class RecordActivity extends AppCompatActivity {
 
                             // 전송한 사진을 기반으로, recyclerView만들기
                             RecordData recordData = new RecordData(absoluteFilePath, startTime, finishTime, actContent, concentrate);
+
+                            intTimeArray=stringTimeToIntTime(startTime,finishTime);
+                            recordData.setHour(intTimeArray[0]);
+                            recordData.setMinute(intTimeArray[1]);
                             recordList.add(recordData);
                             recordAdapter.notifyDataSetChanged();
                             MySharedPreference.setRecordArrayList(RecordActivity.this, MainActivity.dateControl, recordList);
@@ -113,11 +138,14 @@ public class RecordActivity extends AppCompatActivity {
                             //Log.e(TAG, "message : 사진 안찍어서 오류67");
                             //RecordPlusActivity에서 사진을 안찍어서 전송할 경우, 전송한 사진 말고 기본 사진을 갖고 recyclerView만들기
                             RecordData recordData = new RecordData("sampleImage", startTime, finishTime, actContent, concentrate);
+
+                            intTimeArray=stringTimeToIntTime(startTime,finishTime);
+                            recordData.setHour(intTimeArray[0]);
+                            recordData.setMinute(intTimeArray[1]);
+
                             recordList.add(recordData);
                             recordAdapter.notifyDataSetChanged();
                             MySharedPreference.setRecordArrayList(RecordActivity.this, MainActivity.dateControl, recordList);
-
-
                         }
 
                     }
@@ -133,9 +161,9 @@ public class RecordActivity extends AppCompatActivity {
                 public void onActivityResult(ActivityResult result) {
 
                     //사진 저장할떄, 날짜_시간으로 파일이름 설정하기
-                    long now = System.currentTimeMillis();                   //시스템으로 부터 현재 정보를 받아온다.
-                    Date date = new Date(now);                               //시스템의 현재 정보로 부터 날짜를 얻어낸다.
-                    SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd_HHmmss"); //날짜 정보를 어떤식으로 나타낼지 format을 설정한다
+                    long now = System.currentTimeMillis();                                      //시스템으로 부터 현재 정보를 받아온다.
+                    Date date = new Date(now);                                                  //시스템의 현재 정보로 부터 날짜를 얻어낸다.
+                    SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd_HHmmss");   //날짜 정보를 어떤식으로 나타낼지 format을 설정한다
                     String imageFileName = format.format(date);                                 //날짜를 내가 현재 지정한 String 패턴으로 바꾼다.
 
                     if (result.getResultCode() == 100) {
@@ -145,7 +173,9 @@ public class RecordActivity extends AppCompatActivity {
                         RecordData item;
                         Intent intent = result.getData();
                         Bundle bundle = intent.getExtras();
+
                         int position = bundle.getInt("position");
+
                         if (bundle.getByteArray("image") == null) {
 
                             //intent로 넘어온 데이터의 byteArray가 null 일 경우, 기본이미지로 대체하기 위해서 sampleImage 를 파일이름으로 설정
@@ -164,6 +194,12 @@ public class RecordActivity extends AppCompatActivity {
                             String absoluteFilePath = saveBitmapToFileDir(image, imageFileName);
                             item = new RecordData(absoluteFilePath, bundle.getString("startTime"), bundle.getString("finishTime"), bundle.getString("actContent"), bundle.getString("concentrate"));
                         }
+
+                        // 추가할 때, 종료시간 시작시간을 활용해서, String-> Int로 총 시간, 분에 대한 정보 갖고 있도록 하기.
+                        intTimeArray=stringTimeToIntTime(bundle.getString("startTime"),bundle.getString("finishTime"));
+                        item.setHour(intTimeArray[0]);
+                        item.setMinute(intTimeArray[1]);
+
 
                         // adapter에게 변경된 데이터 정보를 알려주고, notify시켜서 bindviewholder에 의해서 화면에 뿌리라는 것을 시킨다.
                         recordAdapter.setItem(position, item);
@@ -343,7 +379,17 @@ public class RecordActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(RecordActivity.this, RecordPlusActivity.class);
+                Bundle bundle = new Bundle();
+                //기록 추가 할 경우 arrayList의 사이즈가 0이 아니면 0번 방의 끝 시간을 보낸다.
+                if (recordList.size() >= 1) {
+                    bundle.putString("finishTimePlus", recordList.get(recordList.size() - 1).getFinishTime());
+                } else {
+                    bundle.putString("finishTimePlus", "00:00");
+                }
+                bundle.putString("update", "false");
 
+
+                i.putExtras(bundle);
                 resultLauncher.launch(i);
             }
 
@@ -357,18 +403,18 @@ public class RecordActivity extends AppCompatActivity {
 
 
         //각각 무슨 역할인지 주석달기
-        File storage = getFilesDir();               // 내부 저장소의 file Directory 경로를 가져온다
-        String fileName = name + ".jpg";              // 내부 저장소에 저장할 파일의 이름을 지정합니다.
+        File storage = getFilesDir();                           // 내부 저장소의 file Directory 경로를 가져온다
+        String fileName = name + ".png";                        // 내부 저장소에 저장할 파일의 이름을 지정합니다.
 
-        File tempFile = new File(storage, fileName); // storage에 지정된 파일이름을 올립니다. (인스턴스 생성)
+        File tempFile = new File(storage, fileName);            // storage에 지정된 파일이름을 올립니다. (인스턴스 생성)
 
         try {
 
             //각각 무슨 역할인지 주석달기
-            tempFile.createNewFile();               //자동으로 빈 파일을 만든다..? 이 부분이 의미가  있는 부분인가?
-            FileOutputStream outputStream = new FileOutputStream(tempFile); // 파일을 쓸 수 있는 스트림을 준비한다. (내가 만든 파일에 저장할 수 잇게 해주는 stream)
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream); //파일에 비트맵 이미지를 compress해서 저장한다. jpeg 파일로
-            outputStream.close();                                           // 스트림을 사용했으니. 닫아준다
+            tempFile.createNewFile();                                                //자동으로 빈 파일을 만든다..? 이 부분이 의미가  있는 부분인가?
+            FileOutputStream outputStream = new FileOutputStream(tempFile);          // 파일을 쓸 수 있는 스트림을 준비한다. (내가 만든 파일에 저장할 수 잇게 해주는 stream)
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);     //파일에 비트맵 이미지를 compress해서 저장한다. jpeg 파일로
+            outputStream.close();                                                     // 스트림을 사용했으니. 닫아준다
 
 
         } catch (FileNotFoundException e) {
@@ -380,7 +426,7 @@ public class RecordActivity extends AppCompatActivity {
             return "sampleImage";
         }
 
-        return storage + "/" + fileName; // 이후에 저장한 절대경로를 return해서 arrayList에 저장하기 위해 사용
+        return storage + "/" + fileName;                                            // 이후에 저장한 절대경로를 return해서 arrayList에 저장하기 위해 사용
 
     }
 
