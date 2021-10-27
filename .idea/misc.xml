@@ -5,6 +5,7 @@
       <map>
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/drawable/add_activity.xml" value="0.17039473684210527" />
+        <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/drawable/background_round.xml" value="0.17039473684210527" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/drawable/button_circle.xml" value="0.17039473684210527" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/drawable/button_shape.xml" value="0.17039473684210527" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/drawable/buttonshape.xml" value="0.16052631578947368" />
@@ -23,6 +24,7 @@
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/activity_calender.xml" value="0.16019736842105264" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/activity_daily_routine.xml" value="0.1" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/activity_daily_routine_plus.xml" value="0.176" />
+        <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/activity_daily_routine_update.xml" value="0.16019736842105264" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/activity_diary.xml" value="0.16" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/activity_examplelayout.xml" value="0.16019736842105264" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/activity_examplelayout2.xml" value="0.1" />
@@ -34,6 +36,7 @@
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/check.xml" value="0.264" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/dialog_act_content_layout.xml" value="0.16" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/dialog_routine_checkbox.xml" value="0.2" />
+        <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/dialog_routine_update_choose.xml" value="0.176" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/dialog_self_feddback_layout.xml" value="0.176" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/dialog_time_select.xml" value="0.16019736842105264" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/fragment_blank.xml" value="0.20108695652173914" />
@@ -41,7 +44,7 @@
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/fragment_evening_routine.xml" value="0.136" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/fragment_item.xml" value="0.20108695652173914" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/fragment_item_list.xml" value="0.20108695652173914" />
-        <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/fragment_moring_routine.xml" value="0.12" />
+        <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/fragment_moring_routine.xml" value="0.176" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/fragment_record.xml" value="0.176" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/fragment_settings.xml" value="0.20108695652173914" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/layout/fragment_statistics.xml" value="0.176" />

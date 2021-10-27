@@ -47,6 +47,8 @@ public class DailyRoutineActivity extends AppCompatActivity {
     private ImageView routinePlusImage;
     private ActivityResultLauncher<Intent> resultLauncher;
     private HorizontalCalenderSelectedListener morningListener,eveningListener;
+    ArrayList<DailyRoutineData> totalArrayList;
+
 
 
 
@@ -108,6 +110,38 @@ public class DailyRoutineActivity extends AppCompatActivity {
                             Bundle bundle = intent.getExtras();
 
                             if (bundle != null) {
+
+                                totalArrayList = MySharedPreference.getRoutineArrayList(DailyRoutineActivity.this, "나의루틴", "전체루틴");
+                                //여기서 번들바꿔서 리사이클러뷰 정보 바꿔주기.
+
+                                Log.e("123","DailyRoutineActivity에서 전체 루틴 array에 신규추가");
+                                // 전체루틴에는 무조건 추가가 된다. 그 때, 일련번호를 삽입하여서, 나중에 추가 ,삭제할 때 사용하자.
+                                int serialNumber;
+                                int randomNum;
+                                while(true){
+                                    boolean check=false;
+                                    randomNum=(int)(Math.random()*1000+1);
+                                    for(int i=0; i<totalArrayList.size();i++){
+                                        if(randomNum==totalArrayList.get(i).getSerialNumber()){
+                                            check=true;
+                                            break;
+                                        }
+                                    }
+                                    if(check==false){
+                                        break;
+                                    }
+                                }
+                                serialNumber=randomNum;
+                                Log.e("123","시리얼 넘버 : "+ serialNumber);
+
+                                DailyRoutineData routineData = new DailyRoutineData(bundle.getString("routineTime"), bundle.getString("routineName"), bundle.getString("routineType"), bundle.getString("routineRepeat"), false,serialNumber);
+
+                                totalArrayList.add(routineData);
+                                MySharedPreference.setRoutineArrayList(DailyRoutineActivity.this, "나의루틴", totalArrayList, "전체루틴");
+
+                                bundle.putInt("serialNumber",serialNumber);
+
+
                                 if (bundle.getString("routineType").equals("아침")) {
                                     Log.e("123","routineActivity 에서 아침 fragment로 이동  bundle : "+ bundle);
                                     morningRoutineFragment.setArguments(bundle);

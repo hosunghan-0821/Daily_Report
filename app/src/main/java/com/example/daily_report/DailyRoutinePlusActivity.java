@@ -21,18 +21,21 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 public class DailyRoutinePlusActivity extends AppCompatActivity {
 
     public static final int INPUT_TYPE_PERSON = 0x00000060;
 
     private String[] items = {"아침", "저녁"};
     private ImageView routinePlusImage;
-    private TextView routineRepeat, routineStartTime, headerTitle;
+    private TextView routineRepeat, routineStartTime, headerTitle,routineTypeText;
     private Spinner routineTypeSpinner;
     private EditText routineName;
     private Bundle bundle;
     private boolean isPlusImage;
-    private int position;
+    private int position,serialNumber;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +48,7 @@ public class DailyRoutinePlusActivity extends AppCompatActivity {
         routinePlusImage = findViewById(R.id.routine_plus_image);
         routineRepeat = findViewById(R.id.routine_repeat_checkbox);
         routineStartTime = findViewById(R.id.routine_time);
+        routineTypeText=findViewById(R.id.routine_type_text);
 
 
         //Spinner에 arrayAdapter 간단하게 장착 하는 코드
@@ -58,16 +62,22 @@ public class DailyRoutinePlusActivity extends AppCompatActivity {
         //update 화면으로 이 화면이 켜졌을 경우 intent를 받고 안 내용들이 null 이 아닌지 체크하고 수정진행
 
         Bundle bundleCheck = getIntent().getExtras();
+        serialNumber=-1;
 
 
         //수정할 경우 받은 인텐트의 번들의 내용이 null 이 아닐거야
         if (bundleCheck != null) {
+
+            //수정할 떄 아침,저녁은 바꾸게 안함
+            routineTypeSpinner.setVisibility(View.GONE);
+            routineTypeText.setVisibility(View.GONE);
+
             position = bundleCheck.getInt("position");
             routineName.setText(bundleCheck.getString("routineName"));
             routineStartTime.setText(bundleCheck.getString("routineTime"));
-
             routineRepeat.setText(bundleCheck.getString("routineRepeat"));
             headerTitle.setText("루틴 수정하기");
+            serialNumber=bundleCheck.getInt("serialNumber");
 
             for (int j = 1; j < 2; j++) {
                 if (routineTypeSpinner.getSelectedItem().toString().equals(bundleCheck.getString("routineType"))) {
@@ -90,6 +100,7 @@ public class DailyRoutinePlusActivity extends AppCompatActivity {
                 Intent resultIntent = new Intent();
                 Intent updateIntent = new Intent();
                 Intent updateEveningIntent = new Intent();
+
                 String nameCheck = routineName.getText().toString();
                 String routineType = routineTypeSpinner.getSelectedItem().toString();
                 String routineTime = routineStartTime.getText().toString();
@@ -109,6 +120,7 @@ public class DailyRoutinePlusActivity extends AppCompatActivity {
                 bundle.putString("routineRepeat", routineRepeatText); // 요일 선택
                 if (bundleCheck != null) {
                     bundle.putInt("position", position);
+                    bundle.putInt("serialNumber",serialNumber);
                 }
 
 
@@ -121,31 +133,87 @@ public class DailyRoutinePlusActivity extends AppCompatActivity {
 
                         resultIntent.putExtras(bundle);
                         setResult(1000, resultIntent);
-                        Log.e("123", "수정할 떄, 이거 setresult 되면 문제다");
+
 
                         finish();
                     }
 
                     //수정 할때,
                     else {
-                        if (routineType.equals("아침")) {
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(DailyRoutinePlusActivity.this);
+                        View dialogView =LayoutInflater.from(DailyRoutinePlusActivity.this).inflate(R.layout.dialog_routine_update_choose,null,false);
+                        TextView firstChoice=dialogView.findViewById(R.id.first_choice);
+                        TextView secondChoice=dialogView.findViewById(R.id.second_choice);
+
+                        builder.setView(dialogView);
+                        AlertDialog chooseDialog=builder.create();
+
+                        chooseDialog.show();
 
 
-                            bundle.putString("update","update");
-                            updateIntent.putExtras(bundle);
-                            setResult(100, updateIntent);
+                        //현재날짜에만 적용할경우
+                        firstChoice.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                bundle.putString("change","changeOnlyThisDay");
+                                chooseDialog.dismiss();
+                                String getDay=MainActivity.dateControl.substring(MainActivity.dateControl.length()-1);
 
-                            finish();
+                                if(routineRepeat.getText().toString().contains(getDay)&&routineTypeSpinner.getSelectedItem().toString().equals(bundleCheck.getString("routineType") ) ){
+                                    if (routineType.equals("아침")) {
+                                        Log.e("123","아침 수정 ");
 
-                        } else if (routineType.equals("저녁")) {
+                                        bundle.putString("update","update");
+                                        updateIntent.putExtras(bundle);
+                                        setResult(100, updateIntent);
 
-                            bundle.putString("update","update");
-                            updateEveningIntent.putExtras(bundle);
-                            setResult(101, updateEveningIntent);
+                                        finish();
 
-                            finish();
+                                    } else if (routineType.equals("저녁")) {
 
-                        }
+                                        Log.e("123","저녁 수정 ");
+                                        bundle.putString("update","update");
+                                        updateEveningIntent.putExtras(bundle);
+                                        setResult(101, updateEveningIntent);
+
+                                        finish();
+                                    }
+                                }
+                                else{
+                                    Toast.makeText(DailyRoutinePlusActivity.this, "(루틴 반복주기),(루틴 실행 Type) 확인하세요", Toast.LENGTH_SHORT).show();
+                                }
+
+                            }
+                        });
+                        //현재날짜와 앞으로의 날자에 적용할 경우
+                        secondChoice.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                bundle.putString("change","changeAllDay");
+                                chooseDialog.dismiss();
+                                if (routineType.equals("아침")) {
+                                    Log.e("123","아침 수정 ");
+
+                                    bundle.putString("update","update");
+                                    updateIntent.putExtras(bundle);
+                                    setResult(100, updateIntent);
+
+                                    finish();
+
+                                } else if (routineType.equals("저녁")) {
+
+                                    Log.e("123","저녁 수정 ");
+                                    bundle.putString("update","update");
+                                    updateEveningIntent.putExtras(bundle);
+                                    setResult(101, updateEveningIntent);
+
+                                    finish();
+
+                                }
+                            }
+                        });
+
 
 
                     }
@@ -169,6 +237,28 @@ public class DailyRoutinePlusActivity extends AppCompatActivity {
                 CheckBox fri = dialogView.findViewById(R.id.checkbox_fri);
                 CheckBox sat = dialogView.findViewById(R.id.checkbox_sat);
                 CheckBox sun = dialogView.findViewById(R.id.checkbox_sun);
+
+                if(routineRepeat.getText().toString().contains("월")){
+                    mon.setChecked(true);
+                }
+                if(routineRepeat.getText().toString().contains("화")){
+                    tue.setChecked(true);
+                }
+                if(routineRepeat.getText().toString().contains("수")){
+                    wed.setChecked(true);
+                }
+                if(routineRepeat.getText().toString().contains("목")){
+                    thu.setChecked(true);
+                }
+                if(routineRepeat.getText().toString().contains("금")){
+                    fri.setChecked(true);
+                }
+                if(routineRepeat.getText().toString().contains("토")){
+                    sat.setChecked(true);
+                }
+                if(routineRepeat.getText().toString().contains("일")){
+                    sun.setChecked(true);
+                }
 
 
                 //확인버튼 눌렀을 때,

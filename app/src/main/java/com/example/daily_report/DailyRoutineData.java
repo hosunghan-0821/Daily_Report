@@ -5,6 +5,7 @@ public class DailyRoutineData {
 
     private String routineTime,routineContent,routineType,routineRepeat;
     private boolean checkBox;
+    private int  serialNumber;
 
 
     public DailyRoutineData(String routineTime, String routineContent, String routineType, String routineRepeat, boolean checkBox) {
@@ -15,8 +16,22 @@ public class DailyRoutineData {
         this.checkBox = checkBox;
     }
 
+    public DailyRoutineData(String routineTime, String routineContent, String routineType, String routineRepeat, boolean checkBox, int serialNumber) {
+        this.routineTime = routineTime;
+        this.routineContent = routineContent;
+        this.routineType = routineType;
+        this.routineRepeat = routineRepeat;
+        this.checkBox = checkBox;
+        this.serialNumber = serialNumber;
+    }
 
+    public int getSerialNumber() {
+        return serialNumber;
+    }
 
+    public void setSerialNumber(int serialNumber) {
+        this.serialNumber = serialNumber;
+    }
 
     public String getRoutineType() {
         return routineType;

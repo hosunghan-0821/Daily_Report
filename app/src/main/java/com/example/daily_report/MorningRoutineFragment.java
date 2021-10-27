@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
@@ -91,15 +92,74 @@ public class MorningRoutineFragment extends Fragment {
 
                         if (result.getResultCode() == 100) {
 
+                            //update 관리 어떻게 할 것인가..
+                            //인텐트에, 기존 그날의 리사이클러뷰 만 수정할 것인지 오늘+앞으로의 루틴에 적용할 것인지.
                             Intent intent = result.getData();
                             Bundle bundle = intent.getExtras();
                             int position = bundle.getInt("position");
-                            updateCheck = bundle.getString("update");
-                            DailyRoutineData routineData = new DailyRoutineData(bundle.getString("routineTime"), bundle.getString("routineName"), bundle.getString("routineType"), bundle.getString("routineRepeat"), false);
+                            int serialNumber = bundle.getInt("serialNumber");
 
-                            routineDataList.set(position, routineData);
-                            dailyRoutineAdapter.notifyItemChanged(position);
-                            MySharedPreference.setRoutineArrayList(getActivity(),MainActivity.dateControl,routineDataList,"아침루틴");
+                            updateCheck = bundle.getString("update");
+
+                            DailyRoutineData routineData = new DailyRoutineData(bundle.getString("routineTime"), bundle.getString("routineName"), bundle.getString("routineType"), bundle.getString("routineRepeat"), false, serialNumber);
+                            //수정 detail한 부분
+                            String updateKind = bundle.getString("change");
+
+                            //해당 날짜만 변경하는 경우
+                            if (updateKind.equals("changeOnlyThisDay")) {
+
+                                Log.e("123", "당일만 수정 ");
+                                routineDataList.set(position, routineData);
+                                dailyRoutineAdapter.notifyItemChanged(position);
+                                MySharedPreference.setRoutineArrayList(getActivity(), MainActivity.dateControl, routineDataList, "아침루틴");
+
+
+                            }
+                            //해당 날짜와 앞으로의 루틴을 수정하는 경우
+                            else if (updateKind.equals("changeAllDay")) {
+                                Log.e("123", "모든날 수정 ");
+
+                                //앞으로의 날짜에 추가하기 위해선, 전체 루틴에서 해당 항목을 수정해야한다.
+                                ArrayList<DailyRoutineData> totalArrayList = new ArrayList<DailyRoutineData>();
+                                totalArrayList = MySharedPreference.getRoutineArrayList(getActivity(), "나의루틴", "전체루틴");
+
+                                for (int i = 0; i < totalArrayList.size(); i++) {
+                                    if (serialNumber == totalArrayList.get(i).getSerialNumber()) {
+
+                                        totalArrayList.set(i, routineData);
+                                        break;
+                                    }
+                                }
+                                MySharedPreference.setRoutineArrayList(getActivity(), "나의루틴", totalArrayList, "전체루틴");
+
+
+                                //해당 날짜의 루틴을 수정할 때에는, 일단 수정된 내용에서 루틴주기가 해당날짜를 포함하고 있는지 확인하고 존재하면 내용 수정.
+                                String getDay = MainActivity.dateControl.substring(MainActivity.dateControl.length() - 1);
+                                if (routineData.getRoutineRepeat().contains(getDay)) {
+
+                                    routineDataList.set(position, routineData);
+                                    dailyRoutineAdapter.notifyItemChanged(position);
+                                    MySharedPreference.setRoutineArrayList(getActivity(), MainActivity.dateControl, routineDataList, "아침루틴");
+                                }
+                                //해당 날짜의 루틴 수정할 때, 수정된 내용에서 루틴주기(월,화,수)가 현재 선택 날짜의 요일을 갖고 있지 않다면, routineDataList에서 삭제해야한다.
+                                else {
+                                    for (int i = 0; i < routineDataList.size(); i++) {
+
+                                        if (routineData.getSerialNumber() == routineDataList.get(i).getSerialNumber()) {
+                                            routineDataList.remove(i);
+                                            dailyRoutineAdapter.notifyItemRemoved(i);
+                                            MySharedPreference.setRoutineArrayList(getActivity(), MainActivity.dateControl, routineDataList, "아침루틴");
+                                            break;
+
+                                        }
+                                    }
+
+
+                                }
+
+
+                            }
+
 
                         }
 
@@ -124,6 +184,7 @@ public class MorningRoutineFragment extends Fragment {
                 bundle.putString("routineType", item.getRoutineType());
                 bundle.putString("routineRepeat", item.getRoutineRepeat());
                 bundle.putInt("position", position);
+                bundle.putInt("serialNumber", item.getSerialNumber());
                 i.putExtras(bundle);
                 updateLauncher.launch(i);
             }
@@ -131,7 +192,7 @@ public class MorningRoutineFragment extends Fragment {
             @Override
             public void onItemLongClick(DailyRoutineAdapter.DailyRoutineViewHolder dailyRoutineViewHolder, View itemView, int position) {
 
-                AlertDialog.Builder deleteDialog = new AlertDialog.Builder(getActivity());
+/*                AlertDialog.Builder deleteDialog = new AlertDialog.Builder(getActivity());
                 deleteDialog.setMessage("이 기록을 삭제하시겠습니까?");
                 deleteDialog.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                     @Override
@@ -139,7 +200,7 @@ public class MorningRoutineFragment extends Fragment {
 
                         routineDataList.remove(position);
                         dailyRoutineAdapter.notifyItemRemoved(position);
-                        MySharedPreference.setRoutineArrayList(getActivity(),MainActivity.dateControl,routineDataList,"아침루틴");
+                        MySharedPreference.setRoutineArrayList(getActivity(), MainActivity.dateControl, routineDataList, "아침루틴");
                         dialogInterface.dismiss();
 
 
@@ -153,7 +214,63 @@ public class MorningRoutineFragment extends Fragment {
                     }
                 });
 
-                deleteDialog.show();
+                deleteDialog.show();*/
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                View dialogView =LayoutInflater.from(getActivity()).inflate(R.layout.dialog_routine_update_choose,null,false);
+                TextView firstChoice=dialogView.findViewById(R.id.first_choice);
+                TextView secondChoice=dialogView.findViewById(R.id.second_choice);
+
+                firstChoice.setText("오늘루틴에서만 삭제하기");
+                secondChoice.setText("앞으로 루틴에서 모두 삭제하기");
+                builder.setView(dialogView);
+                AlertDialog chooseDialog=builder.create();
+
+                chooseDialog.show();
+
+
+                //오늘 루틴에서만 제거할 경우
+                firstChoice.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        routineDataList.remove(position);
+                        dailyRoutineAdapter.notifyItemRemoved(position);
+                        MySharedPreference.setRoutineArrayList(getActivity(), MainActivity.dateControl, routineDataList, "아침루틴");
+
+                        chooseDialog.dismiss();
+
+
+
+                    }
+                });
+                //앞으로의 모든 루틴에서 다 제거할 경우
+                secondChoice.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+
+                        ArrayList<DailyRoutineData> totalArrayList=MySharedPreference.getRoutineArrayList(getActivity(),"나의루틴","전체루틴");
+                        for(int i=0;i<totalArrayList.size();i++){
+                            if(routineDataList.get(position).getSerialNumber()==totalArrayList.get(i).getSerialNumber()){
+                                totalArrayList.remove(i);
+                                MySharedPreference.setRoutineArrayList(getActivity(),"나의루틴",totalArrayList,"전체루틴");
+                                break;
+                            }
+                        }
+
+                        routineDataList.remove(position);
+                        dailyRoutineAdapter.notifyItemRemoved(position);
+                        MySharedPreference.setRoutineArrayList(getActivity(), MainActivity.dateControl, routineDataList, "아침루틴");
+
+                        chooseDialog.dismiss();
+
+                    }
+                });
+
+
+
+
 
             }
         });
@@ -161,35 +278,34 @@ public class MorningRoutineFragment extends Fragment {
 
     }
 
-    public void setRecyclerView(){
+    public void setRecyclerView() {
         //날짜 바뀌는 타이밍에 리사이클러뷰 저장된걸 가져오던지 OR NO VALUE 이면 전체 루틴으로부터 세팅해주던지
-        routineDataList=MySharedPreference.getRoutineArrayList(getActivity(),MainActivity.dateControl,"아침루틴");
-        Log.e("123","routineDataList : " + routineDataList);
+        routineDataList = MySharedPreference.getRoutineArrayList(getActivity(), MainActivity.dateControl, "아침루틴");
+        Log.e("123", "routineDataList : " + routineDataList);
 
 
         //기록된 것이 아무것도 없을 떄, 전체기록으로부터, 요일 필터링을 걸쳐서 세팅해주는 작업을 해야한다.
-        if(routineDataList.isEmpty()){
-            Log.e("123","routineDataList 비어 있습니다. ");
-            String getDay =MainActivity.dateControl.substring(MainActivity.dateControl.length()-1);
+        if (routineDataList.isEmpty()) {
+            Log.e("123", "routineDataList 비어 있습니다. ");
+            String getDay = MainActivity.dateControl.substring(MainActivity.dateControl.length() - 1);
 
             //여기서 전체루틴 가져와서 날짜 비교해서 뿌려주고 data 저장해야지
-            ArrayList<DailyRoutineData> allArrayList =MySharedPreference.getRoutineArrayList(getActivity(),"나의루틴","전체루틴");
+            ArrayList<DailyRoutineData> allArrayList = MySharedPreference.getRoutineArrayList(getActivity(), "나의루틴", "전체루틴");
             //Log.e("123", "allArrayList : "+allArrayList);
 
-            for(int i=0;i<allArrayList.size();i++){
-                String getRoutineRepeat =allArrayList.get(i).getRoutineRepeat();
-                String getRoutineType= allArrayList.get(i).getRoutineType();
-                if(getRoutineRepeat.contains(getDay)&&getRoutineType.equals("아침")){
+            for (int i = 0; i < allArrayList.size(); i++) {
+                String getRoutineRepeat = allArrayList.get(i).getRoutineRepeat();
+                String getRoutineType = allArrayList.get(i).getRoutineType();
+                if (getRoutineRepeat.contains(getDay) && getRoutineType.equals("아침")) {
                     routineDataList.add(allArrayList.get(i));
                 }
             }
 
             dailyRoutineAdapter.setRoutineDataList(routineDataList);
             dailyRoutineAdapter.notifyDataSetChanged();
-            MySharedPreference.setRoutineArrayList(getActivity(),MainActivity.dateControl,routineDataList,"아침루틴");
+            MySharedPreference.setRoutineArrayList(getActivity(), MainActivity.dateControl, routineDataList, "아침루틴");
 
-        }
-        else{
+        } else {
             dailyRoutineAdapter.setRoutineDataList(routineDataList);
             dailyRoutineAdapter.notifyDataSetChanged();
         }
@@ -219,34 +335,85 @@ public class MorningRoutineFragment extends Fragment {
 
         }
         if (updateCheck.equals("update")) {
+            Log.e("123", "신규수정중입니다.");
             updateCheck = "noraml";
         } else {
 
             if (bundle != null) {
-                Log.e("123","화면 열 때, 이거 사용하는지 확인");
+                Log.e("123", "신규추가입니다.");
+
+                ArrayList<DailyRoutineData> tempArrayList = new ArrayList<DailyRoutineData>();
 
                 totalArrayList = MySharedPreference.getRoutineArrayList(getActivity(), "나의루틴", "전체루틴");
-                //여기서 번들바꿔서 리사이클러뷰 정보 바꿔주기.
+                String getDay = MainActivity.dateControl.substring(MainActivity.dateControl.length() - 1);
 
                 // 이 부분에서 날짜를 체크해서 넘겨야 기존 recyclerView에 찍을지 말지 결정
-                DailyRoutineData routineData = new DailyRoutineData(bundle.getString("routineTime"), bundle.getString("routineName"), bundle.getString("routineType"), bundle.getString("routineRepeat"), false);
+                DailyRoutineData routineData = new DailyRoutineData(bundle.getString("routineTime"), bundle.getString("routineName"), bundle.getString("routineType"), bundle.getString("routineRepeat"), false, bundle.getInt("serialNumber"));
 
-                //날짜 비교해서 현재 날짜 요일과 같으면 recycelrView에 띄어주면서 동시에, 저장
-                String getDay =MainActivity.dateControl.substring(MainActivity.dateControl.length()-1);
 
-                if(bundle.getString("routineRepeat").contains(getDay)&&bundle.getString("routineType").equals("아침") ){
-                    routineDataList.add(routineDataList.size(), routineData);
-                    dailyRoutineAdapter.notifyItemInserted(routineDataList.size() - 1);
+                //아무것도 안들어 있을 떄는, 세팅해주고
+                if (routineDataList.isEmpty()) {
+                    Log.e("123", "routineDataList 비어 있습니다. ");
+
+                    //여기서 전체루틴 가져와서 날짜 비교해서 뿌려주고 data 저장해야지
+                    ArrayList<DailyRoutineData> allArrayList = MySharedPreference.getRoutineArrayList(getActivity(), "나의루틴", "전체루틴");
+                    //Log.e("123", "allArrayList : "+allArrayList);
+
+                    for (int i = 0; i < allArrayList.size(); i++) {
+
+                        String getRoutineRepeat = allArrayList.get(i).getRoutineRepeat();
+                        String getRoutineType = allArrayList.get(i).getRoutineType();
+                        if (getRoutineRepeat.contains(getDay) && getRoutineType.equals("아침")) {
+                            routineDataList.add(allArrayList.get(i));
+                        }
+                    }
+
+                    dailyRoutineAdapter.setRoutineDataList(routineDataList);
+                    dailyRoutineAdapter.notifyDataSetChanged();
                     MySharedPreference.setRoutineArrayList(getActivity(), MainActivity.dateControl, routineDataList, "아침루틴");
+
                 }
 
-                //루틴 추가할 떄, 전체루틴에 항상 추가하고, + 해당 recyclerView에 날짜가 동일하면, 날짜별, recyclerView에 추가
-                totalArrayList.add(routineData);
-                MySharedPreference.setRoutineArrayList(getActivity(), "나의루틴", totalArrayList, "전체루틴");
+                //날짜 비교해서 현재 날짜 요일과 같으면 recycelrView에 띄어주면서 저장
+                else{
+                    Log.e("123","여기로 들어오긴 하냐 11");
+                    for (int i = 0; i < totalArrayList.size(); i++) {
+                        if(totalArrayList.get(i).getRoutineType().equals("아침")&&totalArrayList.get(i).getRoutineRepeat().contains(getDay)){
+                            tempArrayList.add(totalArrayList.get(i));
+                        }
+                    }
+                    Log.e("123","여기로 들어오긴 하냐 22");
+                    for(int i=0;i<tempArrayList.size();i++){
+                        Log.e("123","tempArrayList : " + tempArrayList.get(i).getSerialNumber());
+                    }
+                    for(int i=0;i<totalArrayList.size();i++){
+                        Log.e("123","totalArrayList : " + totalArrayList.get(i).getSerialNumber());
+                    }
+
+
+                    boolean check;
+                    for(int i=0; i<tempArrayList.size();i++){
+                        check=false;
+                        for(int j=0; j<routineDataList.size();j++){
+                            if(tempArrayList.get(i).getSerialNumber()==routineDataList.get(j).getSerialNumber()){
+                                check=true;
+                            }
+
+                        }
+                        if(!check){
+                            Log.e("123","여기로 들어오긴 하냐 33");
+                            routineDataList.add(tempArrayList.get(i));
+                            dailyRoutineAdapter.notifyItemInserted(routineDataList.size() - 1);
+                            MySharedPreference.setRoutineArrayList(getActivity(), MainActivity.dateControl, routineDataList, "아침루틴");
+
+                        }
+
+
+                    }
+
+                }
                 resumeCheck = true;
                 bundle = null;
-
-
             }
         }
 

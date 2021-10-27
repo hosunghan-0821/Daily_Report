@@ -14,9 +14,8 @@
 
         android:padding="10dp"
         android:text="실행시간"
-        android:textAlignment="center"
+
         android:textColor="@color/main_color1"
-        app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -25,14 +24,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
+        android:textSize="15dp"
         android:padding="10dp"
         android:text="루틴내용"
-        android:textAlignment="center"
         android:textColor="@color/main_color1"
-        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toTopOf="parent" />
 
     <CheckBox
+        android:layout_marginLeft="10dp"
         android:id="@+id/routine_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -41,6 +41,7 @@
         app:layout_constraintEnd_toEndOf="parent"
 
 
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="TouchTargetSizeCheck" />
 
@@ -49,7 +50,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-      app:layout_constraintGuide_percent="0.2" />
+      app:layout_constraintGuide_percent="0.2"
+        />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"
