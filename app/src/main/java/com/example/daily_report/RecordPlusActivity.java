@@ -168,7 +168,8 @@ public class RecordPlusActivity extends AppCompatActivity {
             }
 
 
-        } else {
+        }
+        else {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
             long now = System.currentTimeMillis();
             Date date = new Date(now);
@@ -177,6 +178,8 @@ public class RecordPlusActivity extends AppCompatActivity {
             finishTime.setText(simpleDateFormat.format(date));
 
         }
+
+
         //  추가하기 버튼 눌렀을 때, 데이터 정보 옮기는 코드 => RecyclerView 추가할 때 실행
         recordPlusButton.setOnClickListener(new View.OnClickListener() {
             @Override

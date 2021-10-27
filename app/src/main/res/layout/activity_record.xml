@@ -33,7 +33,7 @@
         android:id="@+id/header_month"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="10월"
+
         android:textAlignment="textEnd"
         app:layout_constraintBottom_toTopOf="@+id/calendarView"
         app:layout_constraintEnd_toEndOf="parent"

@@ -103,10 +103,24 @@ public class DailyRoutineAdapter extends RecyclerView.Adapter<DailyRoutineAdapte
                         routineDataList.get(position).setCheckBox(false);
                         DailyRoutineAdapter.this.notifyItemChanged(position);
 
+                        if(routineDataList.get(position).getRoutineType().equals("아침")){
+                            MySharedPreference.setRoutineArrayList(view.getContext(), MainActivity.dateControl,routineDataList,"아침루틴");
+                        }
+                        else{
+                            MySharedPreference.setRoutineArrayList(view.getContext(), MainActivity.dateControl,routineDataList,"저녁루틴");
+                        }
+
+
                     }
                     else{
                         routineDataList.get(position).setCheckBox(true);
                         DailyRoutineAdapter.this.notifyItemChanged(position);
+                        if(routineDataList.get(position).getRoutineType().equals("아침")){
+                            MySharedPreference.setRoutineArrayList(view.getContext(), MainActivity.dateControl,routineDataList,"아침루틴");
+                        }
+                        else{
+                            MySharedPreference.setRoutineArrayList(view.getContext(), MainActivity.dateControl,routineDataList,"저녁루틴");
+                        }
 
                     }
 
@@ -114,6 +128,9 @@ public class DailyRoutineAdapter extends RecyclerView.Adapter<DailyRoutineAdapte
             });
 
         }
+    }
+    public void setRoutineDataList(ArrayList<DailyRoutineData> arrayList){
+        this.routineDataList=arrayList;
     }
 
     public interface OnRoutineItemClickListener{

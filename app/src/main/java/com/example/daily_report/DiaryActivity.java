@@ -95,6 +95,7 @@ public class DiaryActivity extends AppCompatActivity {
             feedBackText.setText("");
         }
 
+        //ratingBar 점수 변화 할 떄 하는 행동시킨 코드들
         selfRating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
@@ -108,7 +109,6 @@ public class DiaryActivity extends AppCompatActivity {
                 }
             }
         });
-
 
         //초기 별점 데이터 저장하는
         SharedPreferences sharedPreferences = MySharedPreference.getPreferences(DiaryActivity.this, MainActivity.dateControl);
@@ -223,7 +223,6 @@ public class DiaryActivity extends AppCompatActivity {
                     }
                 });
 
-
                 //취소 버튼을 눌렀을 때, 일어나는 행동들
                 toDoListDialog.setNegativeButton("취소", new DialogInterface.OnClickListener() {
                     @Override
@@ -242,7 +241,7 @@ public class DiaryActivity extends AppCompatActivity {
             }
         });
 
-        //셀프피드백 기록하려고 할때
+        //셀프피드백 기록,수정 하려고 할때
         selfFeedBackPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -388,46 +387,53 @@ public class DiaryActivity extends AppCompatActivity {
 
     }
 
+
+    //JSONArray 함수를 사용하여서 arrayList<String> 의 내용 전부를 Shared에 저장하는 함수
+    //JsonArray를 사용하여서 기존의 ArrayList<String>을 한줄의 String으로 만들어주는 함수
     public void setStringArrayListToSharedPreferences(ArrayList<String> arrayList, String key) {
 
-        //JsonArray를 사용하여서 기존의 ArrayList<String>을 한줄의 String으로 만들어주는 함수
+
 
         SharedPreferences sharedPreferences = MySharedPreference.getPreferences(DiaryActivity.this, MainActivity.dateControl);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        JSONArray jsonArray = new JSONArray();
+        JSONArray jsonArray = new JSONArray();                      //JSONArray 선언하여서
         for (int i = 0; i < arrayList.size(); i++) {
-            jsonArray.put(arrayList.get(i));
+            jsonArray.put(arrayList.get(i));                        //JsonArray에 arrayList<String> 한 list씩 삽입
         }
         if (!arrayList.isEmpty()) {
-            editor.putString(key, jsonArray.toString());
+            editor.putString(key, jsonArray.toString());            //arrayList가 비어있지 않다면, JSONArray에 들어가 있는 arrayList를 .toString으로 만들어서 넣어준다
         } else {
-            editor.putString(key, null);
+            editor.putString(key, null);                        //arrayList가 비어있다면, null값을 넣는다.
         }
         editor.apply();
     }
 
+
+    //이제 변환되었던, String을 다시 arrayList<String> 으로 복구하는 작업.
     public ArrayList<String> getStringArrayListFromSharedPreferences(String key) {
 
         //JsonArray로 사용하여 일렬로 만들어 놓은 arrayList를 다시 내가 사용할 수 있는 arrayList<String>로 바꿔주는 역할
         SharedPreferences sharedPreferences = MySharedPreference.getPreferences(DiaryActivity.this, MainActivity.dateControl);
-        String stringFromJsonArray = sharedPreferences.getString(key, null);
+        String stringFromJsonArray = sharedPreferences.getString(key, null);     // key값을 이용하여서 String 값을 얻어낸다.
 
-        ArrayList<String> arrayList = new ArrayList<>();
+
+
+        ArrayList<String> arrayList = new ArrayList<>();                             //arrayList에 string을 저장하기위해 선언
         if (stringFromJsonArray != null) {
 
             try {
-                JSONArray jsonArray = new JSONArray(stringFromJsonArray);
+                JSONArray jsonArray = new JSONArray(stringFromJsonArray);       //      JSONArray를 (String) 값을 이용해서 생성하고.
                 for (int i = 0; i < jsonArray.length(); i++) {
-                    String data = jsonArray.optString(i);
-                    arrayList.add(data);
+                    String data = jsonArray.optString(i);                       //      JSONArray를 한줄 한줄 뽑아내서
+                    arrayList.add(data);                                        //      arrayList에 넣어준다 .add(data) 한다
                 }
             } catch (Exception e) {
 
             }
 
         }
-        return arrayList;
+        return arrayList;                                                         // 저장된게 없을 경우에는 빈 arrayList를 retrun, 저장된게 있을 경우에는 add된 데이터 arrayList를 리턴
     }
 
     //기존의 내용들을 stop 과 destroy 사이에서 이 함수를 호출하여 저장한다. => 나는 가로세로 전환에의한 강제 종료될 때 사용..

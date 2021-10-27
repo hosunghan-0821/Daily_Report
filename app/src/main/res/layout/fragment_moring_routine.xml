@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
 
+    android:id="@+id/morning_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="10dp"
@@ -19,10 +20,9 @@
             android:layout_height="wrap_content"
 
             android:padding="10dp"
-            android:text="아침루틴"
+            android:text="각 요소 적기"
             android:textColor="@color/main_color1"
             android:textSize="15dp"
-            app:layout_constraintEnd_toStartOf="@id/vertical_guideline_1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 <!--

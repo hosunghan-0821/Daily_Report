@@ -96,10 +96,11 @@ public class DailyRoutinePlusActivity extends AppCompatActivity {
                 String routineRepeatText = routineRepeat.getText().toString();
 
 
-                if (nameCheck.equals("")) {
-                    Toast.makeText(view.getContext(), "루틴이름을 다시 입력해 주세요", Toast.LENGTH_SHORT).show();
+                if (nameCheck.equals("")||routineRepeatText.equals("")) {
+                    Toast.makeText(view.getContext(), "루틴이름 혹은 루틴주기를  확인하여 입력해 주세요", Toast.LENGTH_SHORT).show();
                     isPlusImage = false;
                     nameCheck = "false";
+                    routineRepeatText="false";
                 }
 
                 bundle.putString("routineType", routineType); //아침 or 저녁
@@ -111,7 +112,7 @@ public class DailyRoutinePlusActivity extends AppCompatActivity {
                 }
 
 
-                if (nameCheck.equals("false")) {
+                if (nameCheck.equals("false")||routineRepeatText.equals("false")) {
 
                 } else {
                     //새로 추가할때,
@@ -133,15 +134,17 @@ public class DailyRoutinePlusActivity extends AppCompatActivity {
                             bundle.putString("update","update");
                             updateIntent.putExtras(bundle);
                             setResult(100, updateIntent);
-                            Log.e("123", "수정할 떄, 이거 아침 setresult 되면 문제다");
+
                             finish();
+
                         } else if (routineType.equals("저녁")) {
 
                             bundle.putString("update","update");
                             updateEveningIntent.putExtras(bundle);
                             setResult(101, updateEveningIntent);
-                            Log.e("123", "수정할 떄, 이거 저녁 setresult 되면 문제다");
+
                             finish();
+
                         }
 
 
