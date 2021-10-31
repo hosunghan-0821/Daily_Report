@@ -42,6 +42,7 @@ public class DailyRoutineAdapter extends RecyclerView.Adapter<DailyRoutineAdapte
             holder.checkBox.setChecked(true);
         }
 
+
     }
 
     @Override

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -46,6 +47,12 @@ public class DiaryAdapter extends RecyclerView.Adapter<DiaryAdapter.DiaryViewHol
         else{
             diaryViewHolder.toDoListCheckBox.setChecked(true);
         }
+        if(diaryToDoDataList.get(position).isAlarm()==false){
+            diaryViewHolder.toDoListAlarmImage.setImageResource(R.drawable.add_alarm);
+        }
+        else{
+            diaryViewHolder.toDoListAlarmImage.setImageResource(R.drawable.on_alarm);
+        }
 
     }
 
@@ -63,16 +70,21 @@ public class DiaryAdapter extends RecyclerView.Adapter<DiaryAdapter.DiaryViewHol
     public void setDiaryToDoDataList(ArrayList<DiaryToDoData> diaryToDoDataList){
         this.diaryToDoDataList=diaryToDoDataList;
     }
+
+
     public class DiaryViewHolder extends RecyclerView.ViewHolder{
 
         protected TextView toDoListNumber,toDoListContent;
         protected CheckBox toDoListCheckBox;
+        protected ImageView toDoListAlarmImage;
 
         public DiaryViewHolder(@NonNull View itemView) {
             super(itemView);
+
             toDoListNumber=itemView.findViewById(R.id.todo_list_number);
             toDoListContent=itemView.findViewById(R.id.todo_list_content);
             toDoListCheckBox=itemView.findViewById(R.id.todo_list_checkBox);
+            toDoListAlarmImage=itemView.findViewById(R.id.todo_list_alarm);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -110,10 +122,23 @@ public class DiaryAdapter extends RecyclerView.Adapter<DiaryAdapter.DiaryViewHol
                 }
             });
 
+            //알람설정하는 곳
+            toDoListAlarmImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position =getAbsoluteAdapterPosition();
+                    if(listener!=null){
+                        listener.onAlarmClick(DiaryViewHolder.this,view,position);
+                    }
+
+                }
+            });
+
         }
     }
     public interface OnDiaryItemClickListener {
         void onItemClick(DiaryAdapter.DiaryViewHolder diaryViewHolder,View itemView,int position);
+        void onAlarmClick(DiaryAdapter.DiaryViewHolder diaryViewHolder,View itemView,int position);
 
     }
 }

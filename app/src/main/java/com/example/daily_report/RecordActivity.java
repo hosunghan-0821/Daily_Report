@@ -14,6 +14,7 @@ import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 
 import android.app.Activity;
@@ -50,6 +51,7 @@ import java.util.List;
 
 import devs.mulham.horizontalcalendar.HorizontalCalendar;
 import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
+
 
 @RequiresApi(api = Build.VERSION_CODES.N)
 public class RecordActivity extends AppCompatActivity {

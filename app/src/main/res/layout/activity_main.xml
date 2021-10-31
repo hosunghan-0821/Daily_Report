@@ -29,11 +29,11 @@
 
 
     <TextView
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="20sp"
         android:id="@+id/date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20sp"
+        android:layout_marginRight="20dp"
         android:text="TextView"
         android:textAlignment="viewEnd"
         android:textColor="@color/main_color1"
@@ -69,6 +69,23 @@
         </LinearLayout>
         -->
 
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:background="@drawable/tab_background_ex"
+        android:padding="20dp"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:id="@+id/advice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textStyle="bold|italic"
+        android:textColor="@color/main_color1"
+        app:layout_constraintBottom_toTopOf="@+id/top_guideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/date" />
 
     <Button
         android:id="@+id/diaryButton"
