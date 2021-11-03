@@ -45,14 +45,15 @@
 
             android:textAlignment="viewStart" />
         <Button
+            android:id="@+id/stop_watch_button"
             android:textStyle="bold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="활동유형"
+            android:text=" 스탑워치 및 타이머 "
             android:textAlignment="viewStart" />
 
     </LinearLayout>
-    <!-- TODO: Update blank fragment layout -->
+
     <TextView
         android:paddingTop="20dp"
         android:layout_width="match_parent"

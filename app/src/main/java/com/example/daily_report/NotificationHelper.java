@@ -14,6 +14,8 @@ import androidx.core.app.NotificationCompat;
 
 public class NotificationHelper extends ContextWrapper {
 
+   public static final String notiGroup = "notification_group";
+   public static final String summaryChannelId="summaryChannelID";
     private NotificationManager mManager;
 
     public static final String channelId = "channelID";
@@ -54,8 +56,8 @@ public class NotificationHelper extends ContextWrapper {
     public NotificationCompat.Builder getChannelNotification(String title, String message){
 
         Intent intent = new Intent(this,DiaryActivity.class);
-        //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this,1,intent,0);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,1,intent,PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder notification =new NotificationCompat.Builder(getApplicationContext(),channelId);
 
@@ -64,10 +66,25 @@ public class NotificationHelper extends ContextWrapper {
         notification.setSmallIcon(R.drawable.on_alarm);
         notification.setContentIntent(pendingIntent);
         notification.setAutoCancel(true);
+        notification.setGroup(notiGroup);
         Log.e("123","알림 시작 3");
+
         return notification;
+    }
+    public NotificationCompat.Builder getChannelSummaryNotification(String title, String message){
+
+        NotificationCompat.Builder summaryNotification = new NotificationCompat.Builder(getApplicationContext(),channelId);
+
+        //summaryNotification.setContentTitle(title);
+        summaryNotification.setAutoCancel(true);
+        summaryNotification.setSmallIcon(R.drawable.on_alarm);
+        summaryNotification.setOnlyAlertOnce(true);
+        summaryNotification.setGroup(notiGroup);
+        summaryNotification.setGroupSummary(true);
 
 
+
+        return summaryNotification;
     }
 
 

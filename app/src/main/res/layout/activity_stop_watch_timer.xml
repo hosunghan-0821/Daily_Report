@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".StopWatchTimerActivity"
+    android:orientation="vertical"
+    >
+
+    <TextView
+
+        android:layout_marginTop="100dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="스탑워치"
+        android:padding="10dp"
+
+        android:textStyle="bold"
+
+        />
+    <!--
+        <Chronometer
+
+            android:layout_margin="30dp"
+            android:textAlignment="center"
+            android:id="@+id/chrono"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:format="경과시간=%s"
+
+            android:textSize="20sp"
+            android:padding="10dp"
+            android:textColor="@color/teal_200"
+            />
+    -->
+
+
+    <TextView
+        android:background="@drawable/tab_background_ex"
+        android:id="@+id/stop_watch"
+        android:layout_margin="30dp"
+        android:textSize="20sp"
+        android:padding="10dp"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="00:00:00"
+        android:textColor="@color/main_color1"
+        android:textStyle="bold"
+        />
+
+    <LinearLayout
+        android:background="@drawable/tab_background_ex"
+        android:layout_marginTop="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        >
+
+        <TextView
+            android:id="@+id/start_text"
+            android:textAlignment="center"
+            android:layout_weight="1"
+
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="시작" />
+        <TextView
+            android:id="@+id/write_text"
+            android:textAlignment="center"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="기록"
+            />
+        <TextView
+            android:id="@+id/temp_finish_text"
+            android:textAlignment="center"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="일시정지"
+            />
+        <TextView
+            android:id="@+id/finish_text"
+            android:textAlignment="center"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="정지"
+            />
+
+    </LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginTop="30dp"
+        android:background="@drawable/tab_background_ex"
+        android:padding="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/recyclerview_stop_watch"
+        >
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+
+</LinearLayout>

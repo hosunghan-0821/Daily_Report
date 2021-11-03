@@ -71,6 +71,15 @@ public class DiaryActivity extends AppCompatActivity {
         selfRating = (RatingBar) findViewById(R.id.self_rating);
 
 
+        // 시스템으로부터 날짜 받아오는 코드
+        long now =System.currentTimeMillis();                   //현재 시스템으로 부터 현재 정보를 받아온다.
+        Date date= new Date(now);                               //현재 시스템 시간 날짜 정보로부터, 날짜를 얻어온다.
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-E");
+        String getDay = dateFormat.format(date);
+
+        headerDate.setText(getDay);
+        MainActivity.dateControl = headerDate.getText().toString();
+
         //recyclerview 선언하고, recyclerView 에 장착할 것들 => layoutManger + Adapter
 
         diaryRecyclerView = findViewById(R.id.recyclerview_todo_list);
@@ -83,16 +92,6 @@ public class DiaryActivity extends AppCompatActivity {
         diaryRecyclerView.setAdapter(diaryAdapter);
         //diaryRecyclerView.setHasFixedSize(true);
 
-        //화면전환할 때 현재 날짜 값 인텐트로 보낸거 받아서, header에 날짜 관련 내용 표시
-
-        // 시스템으로부터 날짜 받아오는 코드
-        long now =System.currentTimeMillis();                   //현재 시스템으로 부터 현재 정보를 받아온다.
-        Date date= new Date(now);                               //현재 시스템 시간 날짜 정보로부터, 날짜를 얻어온다.
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-E");
-        String getDay = dateFormat.format(date);
-
-        headerDate.setText(getDay);
-        MainActivity.dateControl = headerDate.getText().toString();
 
         //onCreate 할 떄 기본 날짜에 맞춰서, recyclerView 보여주기.
         diaryToDoDataList = MySharedPreference.getToDoListArrayList(DiaryActivity.this, MainActivity.dateControl);
@@ -143,6 +142,11 @@ public class DiaryActivity extends AppCompatActivity {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 int position = viewHolder.getAbsoluteAdapterPosition();
+
+                if(diaryToDoDataList.get(position).isAlarm()){
+                    cancelAlarm(position);
+                }
+
                 diaryToDoDataList.remove(position);
                 diaryAdapter.notifyDataSetChanged();
                 MySharedPreference.setToDoList(DiaryActivity.this, headerDate.getText().toString(), diaryToDoDataList);
@@ -190,38 +194,48 @@ public class DiaryActivity extends AppCompatActivity {
             @Override
             public void onAlarmClick(DiaryAdapter.DiaryViewHolder diaryViewHolder, View itemView, int position) {
 
-                Calendar c = Calendar.getInstance();
-                //사용할 타임피커 정의하는 부분
-                TimePickerDialog timePickerDialog = new TimePickerDialog(DiaryActivity.this, android.R.style.Theme_Holo_Light_Dialog_NoActionBar, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                if(MainActivity.dateControl.equals(getDay)){
 
-                        Calendar calendar = Calendar.getInstance();
-                        calendar.set(Calendar.HOUR_OF_DAY, selectedHour);
-                        calendar.set(Calendar.MINUTE, selectedMinute);
-                        calendar.set(Calendar.SECOND, 0);
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            Log.e("123", "알림 시작 0");
-                            Log.e("123", "calender " + calendar.getTime());
-                            startAlarm(calendar,position);
+                    Calendar c = Calendar.getInstance();
+                    //사용할 타임피커 정의하는 부분
+                    TimePickerDialog timePickerDialog = new TimePickerDialog(DiaryActivity.this, android.R.style.Theme_Holo_Light_Dialog_NoActionBar, new TimePickerDialog.OnTimeSetListener() {
+                        @Override
+                        public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+
+                            Calendar calendar = Calendar.getInstance();
+                            calendar.set(Calendar.HOUR_OF_DAY, selectedHour);
+                            calendar.set(Calendar.MINUTE, selectedMinute);
+                            calendar.set(Calendar.SECOND, 0);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                Log.e("123", "알림 시작 0");
+                                Log.e("123", "calender " + calendar.getTime());
+                                startAlarm(calendar,position);
+
+                            }
+
 
                         }
+                    }, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true);
+
+
+                    if (!diaryToDoDataList.get(position).isAlarm()) {
+                        timePickerDialog.setTitle("알람시간을 입력하세요");
+                        timePickerDialog.show();
+                        timePickerDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+                    } else {
+                        cancelAlarm(position);
 
 
                     }
-                }, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true);
-
-
-                if (!diaryToDoDataList.get(position).isAlarm()) {
-                    timePickerDialog.setTitle("알람시간을 입력하세요");
-                    timePickerDialog.show();
-                    timePickerDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-
-                } else {
-                    cancelAlarm(position);
-
 
                 }
+
+                else{
+                    Toast.makeText(DiaryActivity.this, "해당 날에만 알람설정이 가능합니다.", Toast.LENGTH_SHORT).show();
+                }
+
+
 
 
             }
@@ -413,7 +427,7 @@ public class DiaryActivity extends AppCompatActivity {
             Intent intent = new Intent(this, AlertReceiver.class);
 
             intent.putExtra("content",diaryToDoDataList.get(position).getToDoListContent());
-
+            intent.putExtra("serialNumber",diaryToDoDataList.get(position).getSerialNumber());
             //이 request 코드를 어떻게 활용할 것인가가 포인트인데.. 어떻게 쓸것인가?
             //int requestCode =>> diary의 일련번호를 활용해서 사용
             PendingIntent pendingIntent = PendingIntent.getBroadcast(this, diaryToDoDataList.get(position).getSerialNumber(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -432,10 +446,9 @@ public class DiaryActivity extends AppCompatActivity {
         diaryAdapter.notifyItemChanged(position);
         MySharedPreference.setToDoList(DiaryActivity.this, headerDate.getText().toString(), diaryToDoDataList);
 
-
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, AlertReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, diaryToDoDataList.get(position).getSerialNumber(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.cancel(pendingIntent);
         Toast.makeText(DiaryActivity.this, "알람을 취소합니다", Toast.LENGTH_SHORT).show();
     }
