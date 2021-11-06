@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         // 시스템으로부터 날짜 받아오는 코드
         long now =System.currentTimeMillis();                   //현재 시스템으로 부터 현재 정보를 받아온다.
         Date date= new Date(now);                               //현재 시스템 시간 날짜 정보로부터, 날짜를 얻어온다.
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-E");
+        java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("yyyy-MM-dd-E");
         String getDay = dateFormat.format(date);
         dateControl=dateFormat.format(date);
         date_=findViewById(R.id.date);

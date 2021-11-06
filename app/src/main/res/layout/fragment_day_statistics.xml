@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+
+        android:id="@+id/header_month"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp"
+        android:text="10월"
+        android:textAlignment="textEnd"
+        android:textColor="@color/main_color1" />
+
+    <devs.mulham.horizontalcalendar.HorizontalCalendarView
+        android:id="@+id/statistics_horizontal_calendar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:colorBottomTextSelected="@color/main_color1"
+        app:colorMiddleTextSelected="@color/main_color1"
+        app:selectorColor="@color/main_color1"
+        app:sizeMiddleText="10dp"
+        app:textColorNormal="@color/black"
+        app:textColorSelected="@color/black"
+
+        tools:ignore="SpeakableTextPresentCheck">
+
+    </devs.mulham.horizontalcalendar.HorizontalCalendarView>
+
+    <androidx.cardview.widget.CardView
+
+
+        android:id="@+id/card_view_chart_day"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="8dp">
+
+
+        <com.github.mikephil.charting.charts.PieChart
+
+            android:id="@+id/pie_chart_day"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/text_day"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+
+
+        android:layout_weight="1"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="8dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/pie_chart_day_recyclerview"
+            >
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+    </androidx.cardview.widget.CardView>
+
+
+</LinearLayout>
