@@ -9,6 +9,7 @@ public class RecordData  {
 
     private String startTime,finishTime,actContent,concentrate,fileName;
     private int hour,minute;
+    private int serialNumber;
 
 
     public RecordData(){}
@@ -20,6 +21,17 @@ public class RecordData  {
         this.actContent = actContent;
         this.concentrate = concentrate;
 
+    }
+
+    public RecordData(String startTime, String finishTime, String actContent, String concentrate, String fileName, int hour, int minute, int serialNumber) {
+        this.startTime = startTime;
+        this.finishTime = finishTime;
+        this.actContent = actContent;
+        this.concentrate = concentrate;
+        this.fileName = fileName;
+        this.hour = hour;
+        this.minute = minute;
+        this.serialNumber = serialNumber;
     }
 
     public String getStartTime() {

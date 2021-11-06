@@ -46,6 +46,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -58,31 +60,60 @@ public class RecordActivity extends AppCompatActivity {
 
     private static final String TAG = "RecordActivity";
 
+
+    private String key;
     private Button recordPlusButton;
     private RecordAdapter recordAdapter;
     private RecyclerView recordRecyclerView;
     private LinearLayoutManager linearLayoutManager;
-    private ArrayList<RecordData> recordList;
+    private ArrayList<RecordData> recordList,weekList;
     private int[] intTimeArray;
+    private SimpleDateFormat weekFormat = new SimpleDateFormat("yyyy-MM-W");
 
+    //String 시작시간 - 종료시간의 차이를 이용하여, 활동시간을 =>>  int 시간/분 으로 환산 바꿔서 저장하는 함수
     public int[] stringTimeToIntTime(String startTime, String finishTime) {
         int timeArray[] = new int[2];
 
-        int startHour,startMinute,finishHour,finishMinute;
-        startHour= Integer.parseInt(startTime.substring(0, 2));
-        startMinute=Integer.parseInt(startTime.substring(3, 5));
+        int startHour, startMinute, finishHour, finishMinute;
+        startHour = Integer.parseInt(startTime.substring(0, 2));
+        startMinute = Integer.parseInt(startTime.substring(3, 5));
 
-        finishHour=Integer.parseInt(finishTime.substring(0, 2));
-        finishMinute= Integer.parseInt(finishTime.substring(3, 5));
+        finishHour = Integer.parseInt(finishTime.substring(0, 2));
+        finishMinute = Integer.parseInt(finishTime.substring(3, 5));
 
-        if(finishMinute<startMinute){
-            finishMinute+=60;
-            finishHour-=1;
+        if (finishMinute < startMinute) {
+            finishMinute += 60;
+            finishHour -= 1;
         }
-        timeArray[0] = finishHour-startHour;
-        timeArray[1] = finishMinute-startMinute;
+        timeArray[0] = finishHour - startHour;
+        timeArray[1] = finishMinute - startMinute;
 
         return timeArray; //Index 0 : 시간 차이 Index 1 : 분 차이;;
+    }
+
+
+
+    /*
+    compareToIgnoreCase() 메소드는
+    대소문자 구분없이 문자열을 비교하고,
+    str1과  str2가 같으면 0,
+    str1이 str2보다 작으면 음수,
+    str1이 str2보다 크면 양수를 리턴합니다.
+
+    ex) str1.compareToIngonreCase(str.2)
+    */
+    public void recordListSort() {
+        for (int i = 0; i < recordList.size(); i++) {
+            for (int j = i + 1; j < recordList.size(); j++) {
+                if (recordList.get(i).getStartTime().compareToIgnoreCase(recordList.get(j).getStartTime()) > 0) {
+                    Collections.swap(recordList, i, j);
+
+
+
+                }
+
+            }
+        }
     }
 
     //추가하기 버튼을 누르면 새로운 액티비티로 이동 후, 정보들을 callback할 때, 경우에 따라서 어떻게 행동할지 정의하는 선언 및 함수정의
@@ -92,7 +123,7 @@ public class RecordActivity extends AppCompatActivity {
                 @Override
                 public void onActivityResult(ActivityResult result) {
 
-                    intTimeArray= new int[2];
+                    intTimeArray = new int[2];
                     long now = System.currentTimeMillis();
                     Date date = new Date(now);
                     SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd_HHmmss");
@@ -129,25 +160,33 @@ public class RecordActivity extends AppCompatActivity {
                             // 전송한 사진을 기반으로, recyclerView만들기
                             RecordData recordData = new RecordData(absoluteFilePath, startTime, finishTime, actContent, concentrate);
 
-                            intTimeArray=stringTimeToIntTime(startTime,finishTime);
+                            intTimeArray = stringTimeToIntTime(startTime, finishTime);
                             recordData.setHour(intTimeArray[0]);
                             recordData.setMinute(intTimeArray[1]);
                             recordList.add(recordData);
                             recordAdapter.notifyDataSetChanged();
+
+                            //Daily 정보저장
                             MySharedPreference.setRecordArrayList(RecordActivity.this, MainActivity.dateControl, recordList);
+                            //Weekly 정보저장
+                            MySharedPreference.setWeekRecordArrayList(RecordActivity.this,"주간통계",recordList,key);
 
                         } catch (Exception e) {
                             //Log.e(TAG, "message : 사진 안찍어서 오류67");
                             //RecordPlusActivity에서 사진을 안찍어서 전송할 경우, 전송한 사진 말고 기본 사진을 갖고 recyclerView만들기
                             RecordData recordData = new RecordData("sampleImage", startTime, finishTime, actContent, concentrate);
 
-                            intTimeArray=stringTimeToIntTime(startTime,finishTime);
+                            intTimeArray = stringTimeToIntTime(startTime, finishTime);
                             recordData.setHour(intTimeArray[0]);
                             recordData.setMinute(intTimeArray[1]);
 
                             recordList.add(recordData);
+                            weekList.add(recordData);
+                            recordListSort();
                             recordAdapter.notifyDataSetChanged();
                             MySharedPreference.setRecordArrayList(RecordActivity.this, MainActivity.dateControl, recordList);
+                            //Weekly 정보저장
+                            MySharedPreference.setWeekRecordArrayList(RecordActivity.this,"주간통계",weekList,key);
                         }
 
                     }
@@ -198,15 +237,19 @@ public class RecordActivity extends AppCompatActivity {
                         }
 
                         // 추가할 때, 종료시간 시작시간을 활용해서, String-> Int로 총 시간, 분에 대한 정보 갖고 있도록 하기.
-                        intTimeArray=stringTimeToIntTime(bundle.getString("startTime"),bundle.getString("finishTime"));
+                        intTimeArray = stringTimeToIntTime(bundle.getString("startTime"), bundle.getString("finishTime"));
                         item.setHour(intTimeArray[0]);
                         item.setMinute(intTimeArray[1]);
 
 
+
                         // adapter에게 변경된 데이터 정보를 알려주고, notify시켜서 bindviewholder에 의해서 화면에 뿌리라는 것을 시킨다.
-                        recordAdapter.setItem(position, item);
-                        recordAdapter.notifyItemChanged(position);
+                        recordList.set(position,item);
+                        recordListSort();
+                        recordAdapter.notifyDataSetChanged();
                         MySharedPreference.setRecordArrayList(RecordActivity.this, MainActivity.dateControl, recordList);
+                        //Weekly 정보저장
+                        MySharedPreference.setWeekRecordArrayList(RecordActivity.this,"주간통계",recordList,key);
                     }
 
                 }
@@ -231,7 +274,10 @@ public class RecordActivity extends AppCompatActivity {
         linearLayoutManager = new LinearLayoutManager(this);
 
         recordRecyclerView.setLayoutManager(linearLayoutManager);
+
+        weekList=new ArrayList<>();
         recordList = new ArrayList<RecordData>();
+
         recordAdapter = new RecordAdapter(recordList);
         recordRecyclerView.setAdapter(recordAdapter);
 
@@ -358,12 +404,14 @@ public class RecordActivity extends AppCompatActivity {
                 SimpleDateFormat dateForamtControl = new SimpleDateFormat("yyyy-MM-dd-E");
                 MainActivity.dateControl = dateForamtControl.format(horizontalCalendar1.getSelectedDate().getTimeInMillis());
 
+                key = weekFormat.format(horizontalCalendar1.getSelectedDate().getTimeInMillis());
                 Log.e("123", "날짜 바뀌는거 제대로 되는지 확인 : " + MainActivity.dateControl);
 
                 headerMonth.setText(getMonth);
 
 
                 recordList = MySharedPreference.getRecordArrayList(RecordActivity.this, MainActivity.dateControl);
+                weekList= MySharedPreference.getWeekRecordArrayList(RecordActivity.this,"주간통계",key);
                 Log.e("123", "recordList 날짜에 맞는 리스트로 가져오는지 확인 : " + recordList);
 
                 recordAdapter.setRecordList(recordList);
@@ -442,6 +490,18 @@ public class RecordActivity extends AppCompatActivity {
         File path = getFilesDir();
         fileNameOnly = fileNameOnly.replace(path + "/", "");
         deleteFile(fileNameOnly);
+
+    }
+
+    private int getWeekOfYear(String date){
+
+        Calendar calendar = Calendar.getInstance();
+        String[] dates = date.split("-");
+        int year = Integer.parseInt(dates[0]);
+        int month = Integer.parseInt(dates[1]);
+        int day = Integer.parseInt(dates[2]);
+        calendar.set(year, month - 1, day);
+        return calendar.get(Calendar.WEEK_OF_YEAR);
 
     }
 

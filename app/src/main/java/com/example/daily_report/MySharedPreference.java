@@ -77,6 +77,49 @@ public class MySharedPreference {
         }
     }
 
+    public static void setWeekRecordArrayList(Context context, String fileName,ArrayList<RecordData> arrayList,String key){
+
+        SharedPreferences sharedPreferences = getPreferences(context, fileName);            //제일 위에 정의한 getPreference 함수 사용하여, context가져오기
+        Gson gson = new GsonBuilder().create();                                             //객체 -> String 바꿔주기 위한 Gson 선언.
+
+        Type arraylistType = new TypeToken<ArrayList<RecordData>>() {                       // 내가 변환한 객체의 type을 얻어내는 코드 Type 와 TypeToken .getType() 메소드를 사용한다.
+        }.getType();
+        String objectToString = gson.toJson(arrayList, arraylistType);                      //이제 객체를 -> String 으로 바꿔보자, 바꿀 떄는 Gson instance의 toJson 함수사용
+        //객체 변수, 객체 타입 (타입토큰으로부터)
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();                         //editor라는 것을 활용하여서, SharedPreferecnes 파일에 기입 할 수 있다.
+        editor.putString(key, objectToString);                          //이제 gson으로 변환된 object to string 을 value로 넣어준다
+        editor.apply();
+
+
+    }
+    public static ArrayList<RecordData> getWeekRecordArrayList(Context context, String fileName,String key){
+
+        ArrayList<RecordData> savedList;                                                        // String에서 Object로 변환될 변수 선언
+        savedList = new ArrayList<RecordData>();
+        Gson gson = new GsonBuilder().create();                                                 //String -> 변환(Gson의 .fromJson 함수 사용) -> 객체 하기위해 선언
+
+
+        SharedPreferences sharedPreferences = getPreferences(context, fileName);                //사용할 sharedPreference 선언
+        String stringToObject = sharedPreferences.getString(key, "");    //Shared 에 저장되어 있는 ,value (String)을 얻어오는과정
+        Type arraylistType = new TypeToken<ArrayList<RecordData>>() {                           //Type, TypeToken을 이용하여서 변환시킨 객체 타입을 얻어낸다.
+        }.getType();
+
+        try {
+            savedList = gson.fromJson(stringToObject, arraylistType);                           //gson을 이용하여서, 저장된 String을 객체로 변환
+            Log.e("123", "tryCatch 중 try : " + savedList);
+            if (savedList == null) {
+                savedList = new ArrayList<RecordData>();                                        //key 값이 없을 때, savedList에 ==null이 들어가있을수 있기떄문에 예외처리
+            }
+            return savedList;                                                                   //저장된 savedList 반환
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return savedList;
+        }
+
+    }
+
     //아래 4개의 함수들은 위와 완전 똑같은 패턴이다.. 이걸 2개의 함수로 줄일 수 있는 방법(문법)이 있는지 알아보자
     //ArrayList<?>와 관련이 있을거 같은데.. 시간이 부족하다 찾아볼
 

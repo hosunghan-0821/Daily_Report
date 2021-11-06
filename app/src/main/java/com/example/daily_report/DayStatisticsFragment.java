@@ -2,6 +2,7 @@ package com.example.daily_report;
 
 import android.graphics.Color;
 import android.icu.text.SimpleDateFormat;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,6 +25,9 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 
 import devs.mulham.horizontalcalendar.HorizontalCalendar;
 import devs.mulham.horizontalcalendar.HorizontalCalendarView;
@@ -54,6 +58,13 @@ public class DayStatisticsFragment extends Fragment {
 
         pieChart=view.findViewById(R.id.pie_chart_day);
         headerMonth=view.findViewById(R.id.header_month);
+
+        //상단월 초기값 설정
+        long now = System.currentTimeMillis();
+        Date date = new Date(now);
+        java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("MM월");
+        String getMonth = dateFormat.format(date);
+        headerMonth.setText(getMonth);
 
         //리사이클러뷰 관련 선언
         recyclerView=view.findViewById(R.id.pie_chart_day_recyclerview);
@@ -100,6 +111,7 @@ public class DayStatisticsFragment extends Fragment {
 
 
                 pieChartLoadData();
+                sortPieChartData();
                 pieRecyclerviewLoad();
                 adapter.notifyDataSetChanged();
 
@@ -110,6 +122,7 @@ public class DayStatisticsFragment extends Fragment {
 
         //아래는 파이차트
         pieChartLoadData();
+        sortPieChartData();
         pieRecyclerviewLoad();
         adapter.notifyDataSetChanged();
 
@@ -218,5 +231,23 @@ public class DayStatisticsFragment extends Fragment {
             statisticsDataArrayList.add(new StatisticsData(pieArrayList.get(i).getLabel(),intHour+" 시간 "+intMinute+" 분 " ));
 
         }
+    }
+
+    public void sortPieChartData(){
+
+        for(int i=0;i<pieArrayList.size();i++){
+
+            for(int j=i+1;j<pieArrayList.size();j++){
+                if(pieArrayList.get(i).getValue()<pieArrayList.get(j).getValue()){
+
+                    Collections.swap(pieArrayList,i,j);
+
+                }
+
+            }
+        }
+
+
+
     }
 }

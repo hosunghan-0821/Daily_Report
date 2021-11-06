@@ -1,6 +1,6 @@
 package com.example.daily_report;
 
-public class StatisticsData {
+public class StatisticsData  {
     private String content,contentTime;
 
     public StatisticsData(String content, String contentTime) {
@@ -23,4 +23,7 @@ public class StatisticsData {
     public void setContentTime(String contentTime) {
         this.contentTime = contentTime;
     }
+
+
+
 }
