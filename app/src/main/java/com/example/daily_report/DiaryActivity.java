@@ -433,6 +433,7 @@ public class DiaryActivity extends AppCompatActivity {
             PendingIntent pendingIntent = PendingIntent.getBroadcast(this, diaryToDoDataList.get(position).getSerialNumber(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+
             Log.e("123", "알림 시작 1");
             Log.e("123","보낸 것 : "+diaryToDoDataList.get(position).getToDoListContent());
         }

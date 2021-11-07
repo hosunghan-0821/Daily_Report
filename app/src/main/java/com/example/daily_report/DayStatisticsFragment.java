@@ -147,12 +147,11 @@ public class DayStatisticsFragment extends Fragment {
 
 
         if(recordArrayList.isEmpty()){
-            pieChart.setVisibility(View.GONE);
+            pieChart.clear();
             return;
         }
-        else{
-            pieChart.setVisibility(View.VISIBLE);
-        }
+
+
         for(int i=0;i<recordArrayList.size();i++){
 
             int hour =recordArrayList.get(i).getHour();

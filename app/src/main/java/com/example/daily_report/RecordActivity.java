@@ -419,7 +419,7 @@ public class RecordActivity extends AppCompatActivity {
         //상단 horizontal 관련 내용 정의
         // 이 달력은 현재보다 한달 느린 달력
         Calendar startDate = Calendar.getInstance();
-        startDate.add(Calendar.MONTH, -1);
+        startDate.add(Calendar.MONTH, -3);
 
         // 이 달력은 현재까지
         Calendar endDate = Calendar.getInstance();

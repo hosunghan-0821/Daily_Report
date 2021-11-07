@@ -183,11 +183,11 @@ public class DailyRoutineActivity extends AppCompatActivity {
         //상단 horizontal 관련 내용 정의
         // 이 달력은 현재보다 한달 느린 달력
         Calendar startDate = Calendar.getInstance();
-        startDate.add(Calendar.MONTH, -1);
+        startDate.add(Calendar.MONTH, -2);
 
         // 이 달력은 현재까지
         Calendar endDate = Calendar.getInstance();
-        endDate.add(Calendar.DAY_OF_WEEK_IN_MONTH,+1);
+        endDate.add(Calendar.DAY_OF_WEEK_IN_MONTH,+0);
 
         //horizontalCalendar builder를 이용해서 약간의 커스텀 부분
         HorizontalCalendar.Builder horizontalCalendar = new HorizontalCalendar.Builder(this, R.id.calendarView);

@@ -6,16 +6,42 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
 
-        android:id="@+id/statistics_week_header_month"
+    <LinearLayout
+
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="20dp"
-        android:text="10월"
-        android:textAlignment="textEnd"
-        android:textColor="@color/main_color1" />
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+
+        >
+
+        <TextView
+
+            android:padding="10dp"
+            android:gravity="left"
+            android:id="@+id/statistics_week_header_date"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:text="[2021-11월-1주차]"
+            android:textColor="@color/main_color1"
+            tools:ignore="TextContrastCheck" />
+        <ImageView
+
+            android:id="@+id/statistics_week_calender_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="10"
+            android:src="@drawable/calendar_image_maincolor" />
+
+
+    </LinearLayout>
+
+
 
     <devs.mulham.horizontalcalendar.HorizontalCalendarView
         android:id="@+id/statistics_week_horizontal_calendar"
@@ -65,9 +91,10 @@
         app:cardElevation="8dp">
 
         <androidx.recyclerview.widget.RecyclerView
+
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/pie_chart_week_recyclerview"
+            android:id="@+id/statistics_week_recyclerview"
             >
 
         </androidx.recyclerview.widget.RecyclerView>
