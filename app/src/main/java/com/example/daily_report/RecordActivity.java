@@ -123,6 +123,7 @@ public class RecordActivity extends AppCompatActivity {
                 @Override
                 public void onActivityResult(ActivityResult result) {
 
+                    int serialNumber;
                     intTimeArray = new int[2];
                     long now = System.currentTimeMillis();
                     Date date = new Date(now);
@@ -158,23 +159,43 @@ public class RecordActivity extends AppCompatActivity {
                             //Log.e("image","absolutFilePath : "+ absoluteFilePath);
 
                             // 전송한 사진을 기반으로, recyclerView만들기
-                            RecordData recordData = new RecordData(absoluteFilePath, startTime, finishTime, actContent, concentrate);
+                            if(weekList.isEmpty()){
+                                serialNumber=0;
+                                Log.e("456","weekList : "+weekList);
+                            }else{
+                                serialNumber = weekList.get(weekList.size()-1).getSerialNumber()+1;
+                                Log.e("456","weekList : "+weekList);
+                            }
+
+                            RecordData recordData = new RecordData(absoluteFilePath, startTime, finishTime, actContent, concentrate,serialNumber);
 
                             intTimeArray = stringTimeToIntTime(startTime, finishTime);
                             recordData.setHour(intTimeArray[0]);
                             recordData.setMinute(intTimeArray[1]);
                             recordList.add(recordData);
+                            weekList.add(recordData);
+                            recordListSort();
                             recordAdapter.notifyDataSetChanged();
 
                             //Daily 정보저장
                             MySharedPreference.setRecordArrayList(RecordActivity.this, MainActivity.dateControl, recordList);
                             //Weekly 정보저장
-                            MySharedPreference.setWeekRecordArrayList(RecordActivity.this,"주간통계",recordList,key);
+                            MySharedPreference.setWeekRecordArrayList(RecordActivity.this,"주간통계",weekList,key);
 
                         } catch (Exception e) {
                             //Log.e(TAG, "message : 사진 안찍어서 오류67");
                             //RecordPlusActivity에서 사진을 안찍어서 전송할 경우, 전송한 사진 말고 기본 사진을 갖고 recyclerView만들기
-                            RecordData recordData = new RecordData("sampleImage", startTime, finishTime, actContent, concentrate);
+                            if(weekList.isEmpty()){
+                                serialNumber=0;
+                                Log.e("456","weekList : "+weekList);
+                            }else{
+                                serialNumber = weekList.get(weekList.size()-1).getSerialNumber()+1;
+                                Log.e("456","weekList : "+weekList);
+                            }
+
+
+
+                            RecordData recordData = new RecordData("sampleImage", startTime, finishTime, actContent, concentrate,serialNumber);
 
                             intTimeArray = stringTimeToIntTime(startTime, finishTime);
                             recordData.setHour(intTimeArray[0]);
@@ -184,6 +205,9 @@ public class RecordActivity extends AppCompatActivity {
                             weekList.add(recordData);
                             recordListSort();
                             recordAdapter.notifyDataSetChanged();
+                            Toast.makeText(RecordActivity.this, "serialNumber : "+serialNumber, Toast.LENGTH_SHORT).show();
+                            Log.e("456","weekList : "+weekList);
+                            //Daily 정보저장
                             MySharedPreference.setRecordArrayList(RecordActivity.this, MainActivity.dateControl, recordList);
                             //Weekly 정보저장
                             MySharedPreference.setWeekRecordArrayList(RecordActivity.this,"주간통계",weekList,key);
@@ -216,11 +240,12 @@ public class RecordActivity extends AppCompatActivity {
                         Bundle bundle = intent.getExtras();
 
                         int position = bundle.getInt("position");
+                        int serialNumber = bundle.getInt("serialNumber");
 
                         if (bundle.getByteArray("image") == null) {
 
                             //intent로 넘어온 데이터의 byteArray가 null 일 경우, 기본이미지로 대체하기 위해서 sampleImage 를 파일이름으로 설정
-                            item = new RecordData("sampleImage", bundle.getString("startTime"), bundle.getString("finishTime"), bundle.getString("actContent"), bundle.getString("concentrate"));
+                            item = new RecordData("sampleImage", bundle.getString("startTime"), bundle.getString("finishTime"), bundle.getString("actContent"), bundle.getString("concentrate"),serialNumber);
 
                         } else {
 
@@ -233,7 +258,7 @@ public class RecordActivity extends AppCompatActivity {
 
                             //새로운 이미지를 활용해여서, 다시 사진 저장하고, 그 경로를 arrayList에 넣어주는 부분.
                             String absoluteFilePath = saveBitmapToFileDir(image, imageFileName);
-                            item = new RecordData(absoluteFilePath, bundle.getString("startTime"), bundle.getString("finishTime"), bundle.getString("actContent"), bundle.getString("concentrate"));
+                            item = new RecordData(absoluteFilePath, bundle.getString("startTime"), bundle.getString("finishTime"), bundle.getString("actContent"), bundle.getString("concentrate"),serialNumber);
                         }
 
                         // 추가할 때, 종료시간 시작시간을 활용해서, String-> Int로 총 시간, 분에 대한 정보 갖고 있도록 하기.
@@ -242,14 +267,19 @@ public class RecordActivity extends AppCompatActivity {
                         item.setMinute(intTimeArray[1]);
 
 
-
                         // adapter에게 변경된 데이터 정보를 알려주고, notify시켜서 bindviewholder에 의해서 화면에 뿌리라는 것을 시킨다.
+                        for(int i =0 ; i<weekList.size();i++){
+                            if(recordList.get(position).getSerialNumber()==weekList.get(i).getSerialNumber()){
+                                weekList.set(i,item);
+                                break;
+                            }
+                        }
                         recordList.set(position,item);
                         recordListSort();
                         recordAdapter.notifyDataSetChanged();
                         MySharedPreference.setRecordArrayList(RecordActivity.this, MainActivity.dateControl, recordList);
                         //Weekly 정보저장
-                        MySharedPreference.setWeekRecordArrayList(RecordActivity.this,"주간통계",recordList,key);
+                        MySharedPreference.setWeekRecordArrayList(RecordActivity.this,"주간통계",weekList,key);
                     }
 
                 }
@@ -266,6 +296,11 @@ public class RecordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record);
 
+
+        //
+        long now2 = System.currentTimeMillis();                                      //시스템으로 부터 현재 정보를 받아온다.
+        Date date2 = new Date(now2);
+        key = weekFormat.format(date2);
 
         //recyclerview 선언하고, recyclerView 에 장착할 것들 => layoutManger + Adapter
         //adapter는 어떤 데이터 리스트들을 처리할 것인지 생성자로 객체 인스턴스화 시키고, 생성
@@ -285,6 +320,7 @@ public class RecordActivity extends AppCompatActivity {
         Intent recordGetIntent = getIntent();
         MainActivity.dateControl = recordGetIntent.getStringExtra("date");
         recordList = MySharedPreference.getRecordArrayList(RecordActivity.this, MainActivity.dateControl);
+        weekList=MySharedPreference.getWeekRecordArrayList(RecordActivity.this,"주간통계",key);
         recordAdapter.setRecordList(recordList);
         recordAdapter.notifyDataSetChanged();
 
@@ -307,6 +343,7 @@ public class RecordActivity extends AppCompatActivity {
                 bundle.putString("actContent", item.getActContent().toString());
                 bundle.putString("concentrate", item.getConcentrate().toString());
                 bundle.putString("update", "true");
+                bundle.putInt("serialNumber",item.getSerialNumber());
                 bundle.putInt("position", position);
 
 
@@ -348,9 +385,20 @@ public class RecordActivity extends AppCompatActivity {
                         }
 
 
+                        for(int j =0 ; j<weekList.size();j++){
+                            if(recordList.get(position).getSerialNumber()==weekList.get(j).getSerialNumber()){
+
+                                Log.e("456","recordList.getSerialNumber : "+recordList.get(position).getSerialNumber());
+                                Log.e("456","weekList.getSerialNumber : "+weekList.get(j).getSerialNumber());
+                                weekList.remove(j);
+                                break;
+                            }
+                        }
+
                         recordList.remove(position);
                         recordAdapter.notifyItemRemoved(position);
                         MySharedPreference.setRecordArrayList(RecordActivity.this, MainActivity.dateControl, recordList);
+                        MySharedPreference.setWeekRecordArrayList(RecordActivity.this,"주간통계",weekList,key);
                         dialogInterface.dismiss();
                         //Log.e("123","my message : RecordActivity에 있는 onItemLongclick 재정의 2");
 
@@ -398,11 +446,14 @@ public class RecordActivity extends AppCompatActivity {
             @Override
             public void onDateSelected(Calendar date, int position) {
 
+
                 SimpleDateFormat dateFormat = new SimpleDateFormat("MM월");
                 String getMonth = dateFormat.format(horizontalCalendar1.getSelectedDate().getTimeInMillis());
 
                 SimpleDateFormat dateForamtControl = new SimpleDateFormat("yyyy-MM-dd-E");
                 MainActivity.dateControl = dateForamtControl.format(horizontalCalendar1.getSelectedDate().getTimeInMillis());
+
+                Log.e("456","달의 몇번 째 주? : "+ getWeekOfMonth(MainActivity.dateControl));
 
                 key = weekFormat.format(horizontalCalendar1.getSelectedDate().getTimeInMillis());
                 Log.e("123", "날짜 바뀌는거 제대로 되는지 확인 : " + MainActivity.dateControl);
@@ -493,7 +544,7 @@ public class RecordActivity extends AppCompatActivity {
 
     }
 
-    private int getWeekOfYear(String date){
+    private int getWeekOfMonth(String date){
 
         Calendar calendar = Calendar.getInstance();
         String[] dates = date.split("-");
@@ -501,7 +552,7 @@ public class RecordActivity extends AppCompatActivity {
         int month = Integer.parseInt(dates[1]);
         int day = Integer.parseInt(dates[2]);
         calendar.set(year, month - 1, day);
-        return calendar.get(Calendar.WEEK_OF_YEAR);
+        return calendar.get(Calendar.WEEK_OF_MONTH);
 
     }
 

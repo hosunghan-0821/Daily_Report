@@ -72,7 +72,7 @@ public class RecordPlusActivity extends AppCompatActivity {
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
     private TimePickerDialog timePickerDialogEx;
-    private int position;
+    private int position,serialNumber;
     private int timeArray[] = new int[2];
 
 
@@ -141,6 +141,7 @@ public class RecordPlusActivity extends AppCompatActivity {
             //  수정하기 버튼 눌렀을 때, 데이터 정보 옮기는 코드 => RecyclerView 수정할 때 실행
             //  RecyclerView 의 포지션에 접근해서 정보를 수정하기 or Intent로 정보를 전달해서 그 함수 내에서, recyclerView 정보의 내용을 수정할지.
             position = bundleCheck.getInt("position");
+            serialNumber=bundleCheck.getInt("serialNumber");
 
             headerTitle.setText("기록수정");
             recordPlusButton.setText("수정");
@@ -200,6 +201,7 @@ public class RecordPlusActivity extends AppCompatActivity {
                 bundle.putString("concentrate", concentrate);
                 if (bundleCheck.getString("update").equals("true")) {
                     bundle.putInt("position", position);
+                    bundle.putInt("serialNumber",serialNumber);
                 }
 
 

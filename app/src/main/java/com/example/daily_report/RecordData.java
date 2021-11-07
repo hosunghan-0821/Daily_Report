@@ -23,14 +23,12 @@ public class RecordData  {
 
     }
 
-    public RecordData(String startTime, String finishTime, String actContent, String concentrate, String fileName, int hour, int minute, int serialNumber) {
+    public RecordData(String fileName,String startTime, String finishTime, String actContent, String concentrate, int serialNumber) {
         this.startTime = startTime;
         this.finishTime = finishTime;
         this.actContent = actContent;
         this.concentrate = concentrate;
         this.fileName = fileName;
-        this.hour = hour;
-        this.minute = minute;
         this.serialNumber = serialNumber;
     }
 
@@ -90,4 +88,11 @@ public class RecordData  {
         this.minute = minute;
     }
 
+    public int getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(int serialNumber) {
+        this.serialNumber = serialNumber;
+    }
 }
