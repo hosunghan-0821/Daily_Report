@@ -133,6 +133,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
                 @Override
                 public void onClick(View view) {
 
+
                     //Log.d("123","my message: RecordAdapter customviewholder 에서 생성자로 존재하는  onClick override 함수 ");
                     int position = getAbsoluteAdapterPosition();
                     if (listener != null) {

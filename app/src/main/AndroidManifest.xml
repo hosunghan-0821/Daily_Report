@@ -14,12 +14,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Daily_Report"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".YouTubeSearchActivity"
+            android:exported="false" />
+        <activity
+            android:name=".YouTubePlayActivity"
+            android:exported="false" />
+
         <service
             android:name=".StopWatchService"
             android:enabled="true"
-            android:exported="true">
-
-        </service>
+            android:exported="true" />
 
         <activity
             android:name=".StopWatchTimerActivity"

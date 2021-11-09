@@ -3,6 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/hosung/AndroidStudioProjects/Daily_Report1/app/src/main/res/layout/activity_diary.xml" value="0.25" />
+        <entry key="..\:/Users/hosung/AndroidStudioProjects/Daily_Report1/app/src/main/res/layout/activity_you_tube_play.xml" value="0.25" />
+        <entry key="..\:/Users/hosung/AndroidStudioProjects/Daily_Report1/app/src/main/res/layout/activity_you_tube_search.xml" value="0.264" />
+        <entry key="..\:/Users/hosung/AndroidStudioProjects/Daily_Report1/app/src/main/res/layout/recyclerview_youtube_search_result_layout.xml" value="0.25" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/drawable/add_activity.xml" value="0.17039473684210527" />
         <entry key="..\:/Users/hosunghan/AndroidStudioProjects/Daily_Report/app/src/main/res/drawable/background_round.xml" value="0.17039473684210527" />

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/tab_background_ex"
+    >
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/vertical_guideline_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/vertical_guideline_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.7" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/vertical_guideline_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <TextView
+        android:padding="10dp"
+        android:id="@+id/text_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="제목"
+        app:layout_constraintStart_toStartOf="@+id/vertical_guideline_1"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/youtube_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:padding="10dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toStartOf="@+id/vertical_guideline_2"
+        app:layout_constraintStart_toEndOf="@+id/text_title"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:id="@+id/channlid_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="채널명"
+        app:layout_constraintStart_toStartOf="@+id/vertical_guideline_1"
+        app:layout_constraintTop_toBottomOf="@+id/youtube_title" />
+
+
+    <TextView
+        android:id="@+id/youtube_channel_id"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toStartOf="@+id/vertical_guideline_2"
+        app:layout_constraintStart_toEndOf="@+id/channlid_text"
+        app:layout_constraintTop_toBottomOf="@+id/youtube_title" />
+
+    <TextView
+        android:padding="10dp"
+        android:layout_marginTop="10dp"
+        android:id="@+id/like_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="좋아요 "
+        app:layout_constraintStart_toStartOf="@+id/vertical_guideline_1"
+        app:layout_constraintTop_toBottomOf="@+id/youtube_channel_id"/>
+
+    <TextView
+        android:padding="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:id="@+id/youtube_like_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintStart_toEndOf="@+id/like_text"
+        app:layout_constraintTop_toBottomOf="@+id/youtube_channel_id" />
+
+    <TextView
+        android:padding="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:id="@+id/viewcount_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="조회수"
+
+        app:layout_constraintStart_toEndOf="@+id/youtube_like_number"
+        app:layout_constraintTop_toBottomOf="@+id/youtube_channel_id" />
+
+    <TextView
+
+        android:padding="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+
+        android:id="@+id/youtube_viewcount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintStart_toEndOf="@+id/viewcount_text"
+        app:layout_constraintTop_toBottomOf="@+id/youtube_channel_id" />
+
+
+
+
+
+    <ImageView
+
+        android:layout_margin="10dp"
+        android:id="@+id/youtube_thumbnail_image"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/vertical_guideline_2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/add_activity" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

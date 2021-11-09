@@ -33,7 +33,9 @@ android {
 
 dependencies {
 
-    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+    implementation 'com.google.code.gson:gson:2.8.8'
     implementation "androidx.viewpager2:viewpager2:1.0.0"
     implementation 'androidx.navigation:navigation-fragment:2.3.5'
     implementation 'androidx.navigation:navigation-ui:2.3.5'
@@ -46,6 +48,7 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'devs.mulham.horizontalcalendar:horizontalcalendar:1.3.4'
+    implementation files('C:\\Users\\hosung\\AndroidStudioProjects\\Daily_Report1\\app\\libs\\YouTubeAndroidPlayerApi.jar')
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

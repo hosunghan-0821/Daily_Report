@@ -50,6 +50,11 @@ public class DiaryActivity extends AppCompatActivity {
     private DiaryAdapter diaryAdapter;
     private ArrayList<String> feedBackArrayList;
     private RatingBar selfRating;
+    private RecyclerView youtubeRecyclerView;
+    private LinearLayoutManager youtubeLinearLayoutManager;
+    private ArrayList<YouTubeContent> youTubeContentArrayList;
+    private YouTubeAdapter youTubeAdapter;
+    private SetYouTubeOnclickListener setYouTubeOnclickListener;
 
     private int hour, minute;
 
@@ -80,6 +85,17 @@ public class DiaryActivity extends AppCompatActivity {
         headerDate.setText(getDay);
         MainActivity.dateControl = headerDate.getText().toString();
 
+        //youtubeRecyclerView 선언 & 장착
+        youtubeRecyclerView= findViewById(R.id.youtube_daily_recyclerview);
+
+        youtubeLinearLayoutManager = new LinearLayoutManager(DiaryActivity.this);
+        youtubeRecyclerView.setLayoutManager(youtubeLinearLayoutManager);
+
+        youTubeContentArrayList = new ArrayList<>();
+        youTubeAdapter= new YouTubeAdapter(youTubeContentArrayList);
+        youtubeRecyclerView.setAdapter(youTubeAdapter);
+
+
         //recyclerview 선언하고, recyclerView 에 장착할 것들 => layoutManger + Adapter
 
         diaryRecyclerView = findViewById(R.id.recyclerview_todo_list);
@@ -108,6 +124,55 @@ public class DiaryActivity extends AppCompatActivity {
             Log.e("123", "저장된게 없을 떄, 공백으로 설정");
             feedBackText.setText("");
         }
+
+        //youtubeRecyclerView onClickListener만들기
+        setYouTubeOnclickListener = new SetYouTubeOnclickListener() {
+            @Override
+            public void setOnClick(int position) {
+
+                Intent intent = new Intent(DiaryActivity.this,YouTubePlayActivity.class);
+                String videoId= youTubeContentArrayList.get(position).getVideoId();
+                intent.putExtra("youtubeVideoId",videoId);
+                startActivity(intent);
+            }
+
+            @Override
+            public void setLongClick(int position) {
+
+                AlertDialog.Builder builder =new AlertDialog.Builder(DiaryActivity.this);
+                builder.setTitle("이 영상을 삭제하겠습니까?");
+                builder.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        youTubeContentArrayList.remove(position);
+                        youTubeAdapter.notifyItemRemoved(position);
+                        //여기서 저장하는 코드.
+                        ArrayList<YouTubeContent> arrayList = MySharedPreference.getYoutubeArrayList(DiaryActivity.this,MainActivity.dateControl);
+                        arrayList.remove(position);
+                        MySharedPreference.setYoutubeArrayList(DiaryActivity.this,MainActivity.dateControl,arrayList);
+
+                        dialog.dismiss();
+                    }
+                });
+
+                builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+                    }
+                });
+
+                builder.show();
+
+
+            }
+        };
+
+        youTubeAdapter.setYoutubeOnclickListener(setYouTubeOnclickListener);
+
+
 
         //ratingBar 점수 변화 할 떄 하는 행동시킨 코드들
         selfRating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
@@ -379,6 +444,11 @@ public class DiaryActivity extends AppCompatActivity {
                 diaryAdapter.setDiaryToDoDataList(diaryToDoDataList);
                 diaryAdapter.notifyDataSetChanged();
 
+                //recyclerView Youtube adapter 참조로 재연결시키고 내용 다시 뿌려줘야함
+                youTubeContentArrayList = MySharedPreference.getYoutubeArrayList(DiaryActivity.this,MainActivity.dateControl);
+                youTubeAdapter.setYouTubeContentArrayList(youTubeContentArrayList);
+                youTubeAdapter.notifyDataSetChanged();
+
             }
         }, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
 
@@ -391,12 +461,11 @@ public class DiaryActivity extends AppCompatActivity {
         });
 
         searchYoutube.setOnClickListener(new View.OnClickListener() {
-            String sWord = "동기부여영상";
 
             @Override
             public void onClick(View view) {
-                Intent searchIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/search?q=/" + sWord));
-                startActivity(searchIntent);
+                Intent intent = new Intent(DiaryActivity.this,YouTubeSearchActivity.class);
+                startActivity(intent);
 
 
             }
@@ -593,6 +662,15 @@ public class DiaryActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         Log.d("123", "my message : 다이어리 액티비티 onResume ");
+
+        youTubeContentArrayList = MySharedPreference.getYoutubeArrayList(DiaryActivity.this,MainActivity.dateControl);
+        youTubeAdapter.setYouTubeContentArrayList(youTubeContentArrayList);
+        if(!youTubeContentArrayList.isEmpty()){
+            youTubeAdapter.notifyDataSetChanged();
+        }
+
+
+
         super.onResume();
     }
 

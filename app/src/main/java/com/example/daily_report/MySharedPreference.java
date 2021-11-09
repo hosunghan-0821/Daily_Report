@@ -259,5 +259,45 @@ public class MySharedPreference {
         }
     }
 
+    public static void setYoutubeArrayList(Context context,String fileName,ArrayList<YouTubeContent> arrayList){
+
+        SharedPreferences sharedPreferences = getPreferences(context, fileName);
+        Gson gson = new GsonBuilder().create();
+
+        Type arraylistType = new TypeToken<ArrayList<YouTubeContent>>() {
+        }.getType();
+
+        String objectToString = gson.toJson(arrayList,arraylistType);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("youtubeDailyRecyclerview", objectToString);
+        editor.apply();
+    }
+
+    public static ArrayList<YouTubeContent> getYoutubeArrayList(Context context , String fileName){
+
+        ArrayList<YouTubeContent> savedList = new ArrayList<>();
+        Gson gson = new GsonBuilder().create();
+
+        SharedPreferences sharedPreferences = getPreferences(context, fileName);
+
+        String stringToObject = sharedPreferences.getString("youtubeDailyRecyclerview", null);
+
+        Type arrayListType = new TypeToken<ArrayList<YouTubeContent>>() {
+        }.getType();
+
+        try {
+            savedList = gson.fromJson(stringToObject,arrayListType);
+
+            if (savedList == null) {
+                savedList = new ArrayList<YouTubeContent>();
+            }
+            return savedList;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return savedList;
+        }
+
+    }
+
 
 }
